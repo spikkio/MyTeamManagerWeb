@@ -20,6 +20,7 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/mtm.gufogiallo.css">
         <script src="js/modernizr-2.6.2.min.js"></script>
 		
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,15 +30,7 @@
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is MyTeamManager</p>
-
+		
 		<!-- JQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
@@ -45,7 +38,8 @@
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		
         <script src="js/plugins.js"></script>
-        <script src="js/script.js"></script>
+		<script src="js/knockout-3.0.0.js"></script>
+        <script src="js/mtm.gufogiallo.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -56,5 +50,55 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        
+		<div id="container" class="container-fluid">
+			<div id="header" class="row">
+				<div id="logo" class="col-md-6">
+					<img src="/img/Soccer.png" height=50 width=50></img>
+				</div>
+				<div id="loggedUser" class="col-md-offset-2 col-md-4">
+					<span>Account: </span>
+				</div>
+			</div>
+			<div id="login">
+				<form role="form" class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Login</label>
+						<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Password</label>
+						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div>
+			<div id="appFrame">
+				<div id="nav">
+					<ul class="nav nav-pills nav-justified">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#">Team</a></li>
+						<li><a href="#">Matches</a></li>
+						<li><a href="#">Training</a></li>
+						<li><a href="#">Message</a></li>
+						<li><a href="#">Facebook</a></li>
+						<li><a href="#">Settings</a></li>
+					</ul>
+				</div>
+				<div id="workArea">
+					<h2>Hello world! This is MyTeamManager</h2>
+				</div>
+			</div>
+			<div id="footer">
+				<p>MyTeamManager &copy 2013-2014</p>
+			</div>	
+		</div>
     </body>
 </html>

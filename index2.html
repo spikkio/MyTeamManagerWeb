@@ -1,0 +1,103 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+
+  <title>My Parse App</title>
+  <meta name="description" content="My Parse App">
+  <meta name="viewport" content="width=device-width">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.15.min.js"></script>
+  <script type="text/javascript" src="./js/communication/listeners/playerListListener.js"></script>
+  <script type="text/javascript" src="./js/communication/beans/team.js"></script>
+  <script type="text/javascript" src="./js/communication/beans/player.js"></script>
+  <script type="text/javascript" src="./js/communication/listeners/signupListener.js"></script>
+  <script type="text/javascript" src="./js/communication/listeners/loginListener.js"></script>
+  <script type="text/javascript" src="./js/communication/listeners/addPlayerListener.js"></script>
+  <script type="text/javascript" src="./js/communication/listeners/deletePlayerListener.js"></script>
+  <script type="text/javascript" src="./js/communication/data/parseManager.js"></script>
+</head>
+
+<body>
+  
+    
+
+  <script type="text/javascript">
+    Parse.initialize("MXUjHyEvzPLiBGg7GZEIXWOH9eHSqaPFcpU6WVVP", "a2tvmgP31UevP4cm4ALcthKXc8uyqPmQSBFHnlXe");
+    
+    var parseManager = new parseManager();
+    	
+    
+   
+   
+    
+    
+    
+    // parseManager.saveQuestionForTest(question, category, answer1, answer2, answer3, answerOk);
+    
+    // var answer = new answer();
+    // parseManager.saveRightAnswerForTest(answer);
+    
+    // var category = new category();
+    // parseManager.saveCategoryForTest(category);
+    
+    /* var TestObject = Parse.Object.extend("TestObject");
+    var testObject = new TestObject();
+      testObject.save({foo: "bar"}, {
+      success: function(object) {
+        $(".success").show();
+      },
+      error: function(model, error) {
+        $(".error").show();
+      }
+    }); */
+    
+    var listener = new playerListListener();
+    var addPlayerListener = new AddPlayerListener();
+    var deletePlayerListener = new DeletePlayerListener();
+    var user = Parse.User.current();
+    
+    function getPlayers() {
+    	parseManager.getPlayers(listener);
+    }
+    
+    function addPlayer() {
+    	var newPlayer = new Player();
+    	var teamObj = new Team();
+    	var teamParseObj = user.get("myteam");
+    	
+    	newPlayer.lastName = "Cierni";
+    	newPlayer.role = 1;
+    	newPlayer.team = teamObj.getTeam(teamParseObj);
+    	console.log("team parseId: " + newPlayer.team.parseId);
+    	
+    	parseManager.addPlayer(newPlayer, addPlayerListener);
+    }
+    
+    function deletePlayer() {
+    	var playerToDelete = new Player();
+    	playerToDelete.parseId = "Gr0kk0PNWq";
+    	parseManager.deletePlayer(playerToDelete, deletePlayerListener);
+    }
+    
+    
+    function createAccount() {
+    	 var listener = new signupListener();
+    	parseManager.signup(listener, "emanuele.pecorari2@gmail.com", "ema22775");
+    }
+    
+    function login() {
+    	var loginlistener = new loginListener();
+        parseManager.login(loginlistener, "emanuele.pecorari@gmail.com", "ema22775");
+    }
+    
+    
+    
+  </script>
+   <p><a href='#' onclick='addPlayer()'>Add new Player</a></p>
+   <p><a href='#' onclick='deletePlayer()'>Delete Player</a></p>
+  <p><a href='#' onclick='getPlayers();'>getPlayers</a></p>
+  <p><a href='#' onclick='createAccount()'>createAccount</a></p>
+  <p><a href='#' onclick='login()'>login</a></p>
+</body>
+
+</html>

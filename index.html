@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 		
-		<!-- CSS -->
+		<!------ CSS ------>
 		
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -21,8 +21,10 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
 		<link rel="stylesheet" href="css/mtm.gufogiallo.css">
-        <script src="js/modernizr-2.6.2.min.js"></script>
 		
+		
+		<!------ JAVASCRIPT ------>
+        <script src="js/modernizr-2.6.2.min.js"></script>
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -30,16 +32,26 @@
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		
-		
+
 		<!-- JQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
 		<!-- JQuery UI-->
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+				<!-- Bootstrap -->
+		<script src="js/bootstrap.min.js"></script>
 		
         <script src="js/plugins.js"></script>
 		<script src="js/knockout-3.0.0.js"></script>
         <script src="js/mtm.gufogiallo.js"></script>
+		
+		<script> $( document ).ready(function() {
+			mtmGufogiallo.init();			
+		});</script>
+		
+		<!------ FONTS ------>
+		<link href='http://fonts.googleapis.com/css?family=Lilita+One' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -59,44 +71,52 @@
         <!-- Add your site or application content here -->
         
 		<div id="container" class="container-fluid">
-			<div id="header" class="row">
-				<div id="logo" class="col-md-6">
-					<img src="/img/Soccer.png" height=50 width=50></img>
+			<div id="headerDiv" class="row">
+				<div id="logoDiv" class="col-md-6">
+					<h1><img src="/img/Soccer.png" height=50 width=50></img>My Team Manager</h1>
 				</div>
-				<div id="loggedUser" class="col-md-offset-2 col-md-4">
-					<span>Account: </span>
+				<div id="loggedUser" class="col-md-offset-2 col-md-2">
+					<span>Account: anonymous</span>
+				</div>
+				<div id="logout" class="col-md-2">
+					<button id="logoutButton" class="btn btn-info">Logout</button>
 				</div>
 			</div>
-			<div id="login">
+			
+			<div id="loginDiv" class="row">
 				<form role="form" class="col-md-offset-4 col-md-4">
 					<div class="form-group">
-						<label for="exampleInputEmail1">Login</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+						<label for="usernameInput">Login</label>
+						<input type="text" class="form-control" id="usernameInput" placeholder="Username">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputPassword1">Password</label>
-						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+						<label for="passwordInput">Password</label>
+						<input type="password" class="form-control" id="passwordInput" placeholder="Password">
 					</div>
-					<button type="submit" class="btn btn-default">Submit</button>
+					<button id="loginButton" class="btn btn-info">Submit</button>
 				</form>
 			</div>
-			<div id="appFrame">
-				<div id="nav">
+			
+			<div id="appFrameDiv" class="row">
+				<div id="navDiv">
 					<ul class="nav nav-pills nav-justified">
 						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Team</a></li>
-						<li><a href="#">Matches</a></li>
-						<li><a href="#">Training</a></li>
-						<li><a href="#">Message</a></li>
-						<li><a href="#">Facebook</a></li>
-						<li><a href="#">Settings</a></li>
+						<li><a href="#team">Team</a></li>
+						<li><a href="#match">Match</a></li>
+						<li><a href="#training">Training</a></li>
+						<li><a href="#message">Message</a></li>
+						<li><a href="#facebook">Facebook</a></li>
+						<li><a href="#settings">Settings</a></li>
 					</ul>
 				</div>
-				<div id="workArea">
-					<h2>Hello world! This is MyTeamManager</h2>
+				<div id="workAreaDiv">
+					<div class="jumbotron">
+						<h1>Hello!</h1>
+						<h2>This is MyTeamManager</h2>
+					</div>
 				</div>
 			</div>
-			<div id="footer">
+			<div id="footerDiv" class="row">
 				<p>MyTeamManager &copy 2013-2014</p>
 			</div>	
 		</div>

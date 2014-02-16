@@ -13,7 +13,7 @@ var mtmGufogiallo = {
 	
 		//FAKE username for testing
 		if ( username === "pippo")  {
-			//Login successful
+			//Login successful - prepare view
 			currentUser = username;
 			console.log( "logging with username '" + username +"'");
 			
@@ -35,6 +35,7 @@ var mtmGufogiallo = {
 		event.preventDefault();
 		event.stopPropagation();
 		
+		//Reset view and logout
 		currentUser = null;
 		jQuery( "#logoutButton" ).hide();
 		jQuery( "#loggedUser" ).hide();
@@ -50,13 +51,14 @@ var mtmGufogiallo = {
 		jQuery("#loggedUser").hide();
 		jQuery("#logoutButton").hide();
 		
+		//Event handlers - wiring
 		jQuery( "#loginButton" ).on( "click", mtmGufogiallo.loginHandler );
 		jQuery( "#logoutButton" ).on( "click", mtmGufogiallo.logoutHandler );
+		
+		//Popover for wrong username - setup
 		jQuery( "#usernameInput" ).on( "focus", function () {
 			jQuery( "#usernameInput" ).popover( 'hide' );
 		});
-		
-		
 		jQuery( "#usernameInput").popover({
 			animation: true,
 			container: "body", 

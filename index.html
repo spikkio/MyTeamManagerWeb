@@ -32,7 +32,7 @@
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		
-
+		
 		<!-- JQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
@@ -40,10 +40,15 @@
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		<!-- Bootstrap -->
 		<script src="js/bootstrap.min.js"></script>
+		<!-- Parse -->
+		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.16.min.js"></script>
 		
         <script src="js/plugins.js"></script>
 		<script src="js/knockout-3.0.0.js"></script>
-        <script src="js/mtm.gufogiallo.js"></script>
+        <!-- My Team Manager scripts-->
+		<script src="js/mtm.gufogiallo.js"></script>
+		<script src="js/mtm.gufogiallo.data.js"></script>
+
 		
 		<script> $( document ).ready(function() {
 			mtmGufogiallo.init();			
@@ -83,6 +88,23 @@
 				</div>
 			</div>
 			
+			<!-- Helper loading modal, for time-consuming operations -->
+			<div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Loading...</h4>
+						</div>
+						<div class="modal-body">
+							<div class="progress progress-striped active">
+								<div class="progress-bar progress-bar-info" style="width: 100%;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<div id="loginDiv" class="row">
 				<form role="form" class="col-md-offset-4 col-md-4">
 					<div class="form-group">
@@ -95,43 +117,45 @@
 					</div>
 					<button id="loginButton" class="btn btn-info">Submit</button>
 				</form>
+	
 			</div>
 			
 			<div id="appFrameDiv" class="row">
 				<div id="navDiv">
 					<ul class="nav nav-pills nav-justified">
-						<li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-						<li><a href="#team" data-toggle="tab">Team</a></li>
-						<li><a href="#match" data-toggle="tab">Match</a></li>
-						<li><a href="#training" data-toggle="tab">Training</a></li>
-						<li><a href="#message" data-toggle="tab">Message</a></li>
-						<li><a href="#facebook" data-toggle="tab">Facebook</a></li>
-						<li><a href="#settings" data-toggle="tab">Settings</a></li>
+						<li class="active"><a href="#homePane" data-toggle="tab">Home</a></li>
+						<li><a href="#teamPane" data-toggle="tab">Team</a></li>
+						<li><a href="#matchPane" data-toggle="tab">Match</a></li>
+						<li><a href="#trainingPane" data-toggle="tab">Training</a></li>
+						<li><a href="#messagePane" data-toggle="tab">Message</a></li>
+						<li><a href="#facebookPane" data-toggle="tab">Facebook</a></li>
+						<li><a href="#settingsPane" data-toggle="tab">Settings</a></li>
 					</ul>
 				</div>
 				<div id="workAreaDiv" class="tab-content">
-					<div class="tab-pane fade in active" id="home">
+					<div class="tab-pane fade in active" id="homePane">
 						<div class="jumbotron">
 							<h1>Hello!</h1>
 							<h2>This is MyTeamManager</h2>
 						</div>
 					</div>
-					<div class="tab-pane fade" id="team">
+					<div class="tab-pane fade" id="teamPane">
 						<h2>This is the Team tab</h2>
+						
 					</div>
-					<div class="tab-pane fade" id="match">
+					<div class="tab-pane fade" id="matchPane">
 						<h2>This is the Match tab</h2>
 					</div>
-					<div class="tab-pane fade" id="training">
+					<div class="tab-pane fade" id="trainingPane">
 						<h2>This is the Traning tab</h2>
 					</div>
-					<div class="tab-pane fade" id="message">
+					<div class="tab-pane fade" id="messagePane">
 						<h2>This is the Message tab</h2>
 					</div>
-					<div class="tab-pane fade" id="facebook">
+					<div class="tab-pane fade" id="facebookPane">
 						<h2>This is the Facebook tab</h2>
 					</div>
-					<div class="tab-pane fade" id="settings">
+					<div class="tab-pane fade" id="settingsPane">
 						<h2>This is the Settings tab</h2>
 					</div>
 				</div>

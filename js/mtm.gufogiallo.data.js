@@ -6,9 +6,9 @@ mtmGufogiallo.data.init = function() {
 };
 
 mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
-	var user = new Parse.User();
+	var userObj = new Parse.User();
 	Parse.User.logIn( username, password, {	
-		success: function(user) {
+		success: function( user ) {
 			// The login succeeded
 			//alert( "Login successful!" );
 			var currentUser = Parse.User.current();
@@ -27,14 +27,32 @@ mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
 	});
 };
 
-mtmGufogiallo.data.getTeam = function( userId, callbackFunction ) {
-	var user = Parse.Object.extend( "User" );
-	var query = new Parse.Query( user );
+mtmGufogiallo.data.getTeamId = function( userId, callbackFunction ) {
+	var userObj = Parse.Object.extend( "User" );
+	var query = new Parse.Query( userObj );
 	query.equalTo( "objectId", userId );
 	query.first({
-		success: function( result ) {
-			var myTeamId = result.get( "myteam" ).id;
+		success: function( user ) {
+			var myTeamId = user.get( "myteam" ).id;
 			return callbackFunction( myTeamId );
+		},
+		error: function(error) {
+			alert( "Error: " + error.code + " " + error.message );
+		}
+	});
+};
+
+mtmGufogiallo.data.getTeam = function( teamId, callbackFunction ) {
+	var playerObj = Parse.Object.extend( "Player" );
+	var teamObj = Parse.Object.extend( "UserTeam" );
+	var query = new Parse.Query( playerObj );
+	var innerQuery = new Parse.Query( teamObj );
+	innerQuery.equalTo( "objectId", teamId );
+	query.matchesQuery( "team", innerQuery);
+	query.find({
+		success: function( players ) {
+			console.log( "Players found: " + players );
+			return callbackFunction( players );
 		},
 		error: function(error) {
 			alert( "Error: " + error.code + " " + error.message );

@@ -42,11 +42,18 @@
 		<script src="js/bootstrap.min.js"></script>
 		<!-- Parse -->
 		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.16.min.js"></script>
-		
-        <script src="js/plugins.js"></script>
+		<!-- Mustache-->
+		<script type="text/javascript" src="js/mustache.js"></script>
+		<!-- Sammy -->
+		<script type="text/javascript" src="js/sammy-0.7.5.min.js"></script>
+		<script type="text/javascript" src="js/sammy.mustache-0.7.5.min.js"></script>
+		<!-- JQuery plugins-->
+		<script src="js/plugins.js"></script>
+		<!-- KnowkoutJs -->
 		<script src="js/knockout-3.0.0.js"></script>
         <!-- My Team Manager scripts-->
 		<script src="js/mtm.gufogiallo.js"></script>
+		<script src="js/mtm.gufogiallo.controller.js"></script>
 		<script src="js/mtm.gufogiallo.data.js"></script>
 
 		
@@ -123,42 +130,17 @@
 			<div id="appFrameDiv" class="row">
 				<div id="navDiv">
 					<ul class="nav nav-pills nav-justified">
-						<li class="active"><a href="#homePane" data-toggle="tab">Home</a></li>
-						<li><a href="#teamPane" data-toggle="tab">Team</a></li>
-						<li><a href="#matchPane" data-toggle="tab">Match</a></li>
-						<li><a href="#trainingPane" data-toggle="tab">Training</a></li>
-						<li><a href="#messagePane" data-toggle="tab">Message</a></li>
-						<li><a href="#facebookPane" data-toggle="tab">Facebook</a></li>
-						<li><a href="#settingsPane" data-toggle="tab">Settings</a></li>
+						<li id="homePaneAnchor"><a  href="#/">Home</a></li>
+						<li id="teamPaneAnchor"><a  href="#/team">Team</a></li>
+						<li id="matchPaneAnchor"><a  href="#/match">Match</a></li>
+						<li id="trainingPaneAnchor"><a  href="#/training">Training</a></li>
+						<li id="messagePaneAnchor"><a  href="#/message">Message</a></li>
+						<li id="facebookPaneAnchor"><a  href="#/facebook">Facebook</a></li>
+						<li id="settingsPaneAnchor"><a  href="#/settings">Settings</a></li>
 					</ul>
 				</div>
-				<div id="workAreaDiv" class="tab-content">
-					<div class="tab-pane fade in active" id="homePane">
-						<div class="jumbotron">
-							<h1>Hello!</h1>
-							<h2>This is MyTeamManager</h2>
-						</div>
-					</div>
-					<div class="tab-pane fade" id="teamPane">
-						<h2>This is the Team tab</h2>
-						
-					</div>
-					<div class="tab-pane fade" id="matchPane">
-						<h2>This is the Match tab</h2>
-					</div>
-					<div class="tab-pane fade" id="trainingPane">
-						<h2>This is the Traning tab</h2>
-					</div>
-					<div class="tab-pane fade" id="messagePane">
-						<h2>This is the Message tab</h2>
-					</div>
-					<div class="tab-pane fade" id="facebookPane">
-						<h2>This is the Facebook tab</h2>
-					</div>
-					<div class="tab-pane fade" id="settingsPane">
-						<h2>This is the Settings tab</h2>
-					</div>
-				</div>
+				<div id="workAreaDiv">
+					<!-- This is where things happen... -->
 			</div>
 			<div id="footerDiv" class="row">
 				<p>MyTeamManager &copy 2013-2014</p>

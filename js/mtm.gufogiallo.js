@@ -1,6 +1,8 @@
 var mtmGufogiallo = {
 
 	currentUsername:  null,
+	currentUserId: null,
+	currentTeamId: null,
 	
 	//Namespace handling function
     namespace: function( ns ) {
@@ -24,58 +26,7 @@ var mtmGufogiallo = {
 		jQuery( "#loadingModal" ).modal( 'hide' );
 	},
 	
-	//Event handlers
-	
-	loginHandler: function( event ) {
-		event.preventDefault();
-		event.stopPropagation();
-		
-		var username = jQuery( "#usernameInput" ).val();
-		var password = jQuery( "#passwordInput" ).val();
-		
-		
-		mtmGufogiallo.showLoadingModal();
-		
-		mtmGufogiallo.data.login( username, password, function( result ) {
-			mtmGufogiallo.hideLoadingModal();
-			if ( typeof result === "string" )  {
-				//Login successful - prepare view
-				currentUsername = result;				
-				console.log( "logging with username '" + currentUsername + "'" );
-				jQuery( "#loggedUser > span" ).text("Account: " + currentUsername);
-				jQuery( "#loggedUser" ).show();
-				jQuery( "#logoutButton" ).show();
-				jQuery( "#loginDiv" ).hide();
-				jQuery( "#appFrameDiv" ).show();
-			} else {
-				//Login failed
-				jQuery( "#loginDiv > form > div").addClass( "has-error" );
-				jQuery( "#usernameInput").popover('show');
-			}
-		});		
-	},
-	
-	
-	logoutHandler: function( event ) {
-		event.preventDefault();
-		event.stopPropagation();
-		
-		//Reset view and logout
-		currentUsername = null;
-		jQuery( "#logoutButton" ).hide();
-		jQuery( "#loggedUser" ).hide();
-		jQuery( "#appFrameDiv" ).hide();
-		jQuery( "#loginDiv > form > div").removeClass( "has-error" );
-		jQuery( "#loginDiv" ).show();
-	},
-	
-	//init function
-	init: function() {
-		console.log( "ready!" );
-		jQuery("#appFrameDiv").hide();
-		jQuery("#loggedUser").hide();
-		jQuery("#logoutButton").hide();
-		
+	initLoginForm: function () {
 		//Event handlers - wiring
 		jQuery( "#loginButton" ).on( "click", mtmGufogiallo.loginHandler );
 		jQuery( "#logoutButton" ).on( "click", mtmGufogiallo.logoutHandler );
@@ -94,6 +45,75 @@ var mtmGufogiallo = {
 			trigger: "manual",
 			content: "Unknown user and/or password mismatch",
 		});
-	}
+	},
 	
+	showLoginForm: function () {
+		jQuery("#appFrameDiv").hide();
+		jQuery("#loggedUser").hide();
+		jQuery("#logoutButton").hide();
+	},
+	
+	hideLoginForm: function () {
+		jQuery( "#loggedUser > span" ).text("Account: " + mtmGufogiallo.currentUsername);
+		jQuery( "#loggedUser" ).show();
+		jQuery( "#logoutButton" ).show();
+		jQuery( "#loginDiv" ).hide();
+		jQuery( "#appFrameDiv" ).show();
+	},
+	
+	//Event handlers
+	
+	loginHandler: function( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+		
+		var username = jQuery( "#usernameInput" ).val();
+		var password = jQuery( "#passwordInput" ).val();
+		
+		
+		mtmGufogiallo.showLoadingModal();
+		
+		mtmGufogiallo.data.login( username, password, function( result ) {
+			mtmGufogiallo.hideLoadingModal();
+			//if ( typeof result === "string" )  {
+			if ( result instanceof Array )  {
+				//Login successful - prepare view
+				mtmGufogiallo.currentUsername = result[ 0 ];
+				mtmGufogiallo.currentUserId = result[ 1 ];
+				console.log( "logging with username '" + mtmGufogiallo.currentUsername + "'" );
+				mtmGufogiallo.hideLoginForm();
+			} else {
+				//Login failed
+				jQuery( "#loginDiv > form > div").addClass( "has-error" );
+				jQuery( "#usernameInput").popover('show');
+			}
+		});		
+	},
+		
+	logoutHandler: function( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+		
+		//Reset view and logout
+		currentUsername = null;
+		jQuery( "#logoutButton" ).hide();
+		jQuery( "#loggedUser" ).hide();
+		jQuery( "#appFrameDiv" ).hide();
+		jQuery( "#loginDiv > form > div").removeClass( "has-error" );
+		jQuery( "#loginDiv" ).show();
+	},
+	
+	//init function
+	init: function() {
+		//Initialize data component
+		mtmGufogiallo.data.init();
+		//Initialize controller component
+		mtmGufogiallo.controller.init();
+		//Initialize login form
+		mtmGufogiallo.initLoginForm();
+		//Show login form to allow access
+		mtmGufogiallo.showLoginForm();
+		
+		console.log( "ready!" );
+	}
 };

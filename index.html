@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
-        <meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
         <meta name="description" content="">
@@ -49,9 +49,13 @@
 		<script type="text/javascript" src="js/sammy.mustache-0.7.5.min.js"></script>
 		<!-- JQuery plugins-->
 		<script src="js/plugins.js"></script>
+		<!-- JQuery tablesorter-->
+		<script src="js/jquery.tablesorter.min.js"></script>
 		<!-- KnowkoutJs -->
 		<script src="js/knockout-3.0.0.js"></script>
-        <!-- My Team Manager scripts-->
+		<!-- i18next localization library -->
+		<script src="js/i18next-1.7.2.min.js"></script>
+		<!-- My Team Manager scripts-->
 		<script src="js/mtm.gufogiallo.js"></script>
 		<script src="js/mtm.gufogiallo.controller.js"></script>
 		<script src="js/mtm.gufogiallo.data.js"></script>
@@ -88,10 +92,11 @@
 					<h1><img src="img/Soccer.png" height=50 width=50></img>My Team Manager</h1>
 				</div>
 				<div id="loggedUser" class="col-md-offset-2 col-md-2">
-					<span>Account: anonymous</span>
+					<span data-i18n="headerDiv.account">Account: </span>
+					<span id="loggedUserName">anonymous</span>
 				</div>
 				<div id="logout" class="col-md-2">
-					<button id="logoutButton" class="btn btn-info">Logout</button>
+					<button id="logoutButton" class="btn btn-info" data-i18n="headerDiv.logout">Logout</button>
 				</div>
 			</div>
 			
@@ -100,7 +105,7 @@
 				<div class="modal-dialog modal-sm">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h4 class="modal-title">Loading...</h4>
+							<h4 class="modal-title" data-i18n="loadingModal.message">Loading...</h4>
 						</div>
 						<div class="modal-body">
 							<div class="progress progress-striped active">
@@ -112,21 +117,42 @@
 				</div>
 			</div>
 			
+			<!-- Helper error modal, for error conditions -->
+			<div class="modal fade" id="errorModal" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" data-i18n="errorModal.title"><b>Error!</b></h4>
+						</div>
+						<div class="modal-body">
+							<!-- The following <p> will contain the error message -->
+							<p data-i18n="errorModal.errorMessage">Error message placeholder</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal" data-i18n="errorModal.close">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<div id="appFrameDiv" class="row">
 				<div id="navDiv">
+					<hr>
 					<ul class="nav nav-pills nav-justified">
-						<li id="homePaneAnchor"><a  href="#/">Home</a></li>
-						<li id="teamPaneAnchor"><a  href="#/team">Team</a></li>
-						<li id="matchPaneAnchor"><a  href="#/match">Match</a></li>
-						<li id="trainingPaneAnchor"><a  href="#/training">Training</a></li>
-						<li id="messagePaneAnchor"><a  href="#/message">Message</a></li>
-						<li id="facebookPaneAnchor"><a  href="#/facebook">Facebook</a></li>
-						<li id="settingsPaneAnchor"><a  href="#/settings">Settings</a></li>
+						<li id="homePaneAnchor"><a href="#/" data-i18n="navLabel.home">Home</a></li>
+						<li id="teamPaneAnchor"><a href="#/team" data-i18n="navLabel.team">Team</a></li>
+						<li id="matchPaneAnchor"><a href="#/match" data-i18n="navLabel.match">Match</a></li>
+						<li id="trainingPaneAnchor"><a href="#/training" data-i18n="navLabel.training">Training</a></li>
+						<li id="messagePaneAnchor"><a href="#/message" data-i18n="navLabel.message">Message</a></li>
+						<li id="facebookPaneAnchor"><a href="#/facebook" data-i18n="navLabel.facebook">Facebook</a></li>
+						<li id="settingsPaneAnchor"><a href="#/settings" data-i18n="navLabel.settings">Settings</a></li>
 					</ul>
 				</div>
+				<hr>
 				<div id="workAreaDiv">
 					<!-- This is where things happen... -->
 			</div>
+			<hr>
 			<div id="footerDiv" class="row">
 				<p>MyTeamManager &copy 2013-2014</p>
 			</div>	

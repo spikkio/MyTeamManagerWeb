@@ -1,13 +1,15 @@
+<script> jQuery("#loginDiv").i18n(); </script>
+
 <div id="loginDiv" class="row">
 	<form role="form" class="col-md-offset-4 col-md-4">
 		<div class="form-group">
-			<label for="usernameInput">Login</label>
-			<input type="text" class="form-control" id="usernameInput" placeholder="Username">
+			<label for="usernameInput" data-i18n="loginLabel.username">Login</label>
+			<input type="text" class="form-control" id="usernameInput" placeholder="Username" data-i18n="[placeholder]loginLabel.usernamePlaceholder">
 		</div>
 		<div class="form-group">
-			<label for="passwordInput">Password</label>
-			<input type="password" class="form-control" id="passwordInput" placeholder="Password">
+			<label for="passwordInput" data-i18n="loginLabel.password">Password</label>
+			<input type="password" class="form-control" id="passwordInput" placeholder="Password" data-i18n="[placeholder]loginLabel.passwordPlaceholder">
 		</div>
-		<button id="loginButton" class="btn btn-info">Submit</button>
+		<button id="loginButton" class="btn btn-info" data-i18n="loginLabel.submitButton">Submit</button>
 	</form>	
 </div>

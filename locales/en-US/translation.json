@@ -1,0 +1,39 @@
+{
+	"app": {
+		"name": "My Team Manager"
+	},
+
+	"loginLabel": {
+		"username": "enLogin",
+		"password": "enPassword",
+		"usernamePlaceholder" : "enUsername",
+		"passwordPlaceholder" : "enPassword",
+		"submitButton" : "enSubmit"
+	},
+
+	"errorModal": {
+		"title": "enError",
+		"errorMessage": "The application faced an unexpected error...",
+		"errorType1": "Error Type 1 detected",
+		"close": "enClose"
+	},
+
+	"loadingModal": {
+		"message": "enLoading..."
+	},
+
+	"header": {
+		"account": "enAccount:",
+		"logout": "enLogout"
+	},
+
+	"navLabel": {
+		"home": "enHome",
+		"team": "enTeam",
+		"match": "enMatch",
+		"training": "enTraining",
+		"message": "enMessage",
+		"facebook": "enFacebook",
+		"settings": "enSettings"
+	}
+}

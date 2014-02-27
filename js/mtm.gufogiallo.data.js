@@ -7,12 +7,14 @@ mtmGufogiallo.data.init = function() {
 
 mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
 	var userObj = new Parse.User();
+	var currentUser = null;
+	var result = null;
 	Parse.User.logIn( username, password, {	
 		success: function( user ) {
 			// The login succeeded
 			//alert( "Login successful!" );
-			var currentUser = Parse.User.current();
-			var result = new Array();
+			currentUser = Parse.User.current();
+			result = new Array();
 			result[ 0 ] = currentUser.getUsername();
 			result[ 1 ] = user.id;
 			return callbackFunction( result );
@@ -30,10 +32,11 @@ mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
 mtmGufogiallo.data.getTeamId = function( userId, callbackFunction ) {
 	var userObj = Parse.Object.extend( "User" );
 	var query = new Parse.Query( userObj );
+	var myTeamId  = null;
 	query.equalTo( "objectId", userId );
 	query.first({
 		success: function( user ) {
-			var myTeamId = user.get( "myteam" ).id;
+			myTeamId = user.get( "myteam" ).id;
 			return callbackFunction( myTeamId );
 		},
 		error: function(error) {
@@ -42,24 +45,76 @@ mtmGufogiallo.data.getTeamId = function( userId, callbackFunction ) {
 	});
 };
 
-mtmGufogiallo.data.getTeam = function( teamId, callbackFunction ) {
+mtmGufogiallo.data.getTeamName = function( teamId, callbackFunction ) {
+	var teamObj = Parse.Object.extend( "UserTeam" );
+	var query = new Parse.Query( teamObj );
+	var myTeamName  = null;
+	query.equalTo( "objectId", teamId );
+	query.first({
+		success: function( team ) {
+			myTeamName = team.get( "name" );
+			return callbackFunction( myTeamName );
+		},
+		error: function(error) {
+			alert( "Error: " + error.code + " " + error.message );
+		}
+	});
+};
+
+mtmGufogiallo.data.getTeamIdAndName= function( userId, callbackFunction ) {
+	var userObj = Parse.Object.extend( "User" );
+	var teamObj = Parse.Object.extend( "UserTeam" );
+	var userQuery = new Parse.Query( userObj );
+	var teamQuery = new Parse.Query( teamObj );
+	var myTeamId  = null;
+	var myTeamName = null;
+	var result = null;
+	userQuery.equalTo( "objectId", userId );
+	userQuery.first({
+		success: function( user ) {
+			myTeamId = user.get( "myteam" ).id;
+		},
+		error: function(error) {
+			alert( "Error: " + error.code + " " + error.message );
+		}
+	});
+	teamQuery.equalTo( "objectId", myTeamId );
+	teamQuery.first({
+		success: function( team ) {
+			myTeamName = team.get( "name" );
+			result = new Array();
+			result[ 0 ] = myTeamId;
+			result[ 1 ] = myTeamName;
+			return callbackFunction( result );
+		},
+		error: function(error) {
+			alert( "Error: " + error.code + " " + error.message );
+		}
+	});
+};
+
+
+mtmGufogiallo.data.getTeamPlayers = function( teamId, callbackFunction ) {
 	var playerObj = Parse.Object.extend( "Player" );
 	var teamObj = Parse.Object.extend( "UserTeam" );
 	var query = new Parse.Query( playerObj );
 	var innerQuery = new Parse.Query( teamObj );
+	
 	innerQuery.equalTo( "objectId", teamId );
 	query.matchesQuery( "team", innerQuery);
+	query.equalTo( "is_deleted", 0 );
+	query.select( "game_played", "goal_scored", "last_name", "name", "rating", "role" );
+	
+	query.ascending( "role", "last_name" );
 	query.find({
 		success: function( players ) {
-			console.log( "Players found: " + players );
+			//console.log( "Players found: " + players );
 			return callbackFunction( players );
 		},
 		error: function(error) {
 			alert( "Error: " + error.code + " " + error.message );
 		}
 	});
-	//var myTeamId = 
-	//var myTeam = 
 };
 
 

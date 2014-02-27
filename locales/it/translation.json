@@ -1,0 +1,40 @@
+{
+	"app": {
+		"name": "My Team Manager"
+	},
+
+	"loginLabel": {
+		"username": "itLogin",
+		"password": "itPassword",
+		"usernamePlaceholder": "itUsername",
+		"passwordPlaceholder": "itPassword",
+		"submitButton": "itSubmit",
+		"popoverText": "itUnknown user and/or password mismatch"
+	},
+
+	"errorModal": {
+		"title": "itError",
+		"errorMessage": "itThe application faced an unexpected error...",
+		"errorType1": "itError Type 1 detected",
+		"close": "itClose"
+	},
+
+	"loadingModal": {
+		"message": "itLoading..."
+	},
+
+	"headerDiv": {
+		"account": "itAccount:",
+		"logout": "itLogout"
+	},
+
+	"navLabel": {
+		"home": "itHome",
+		"team": "itTeam",
+		"match": "itMatch",
+		"training": "itTraining",
+		"message": "itMessage",
+		"facebook": "itFacebook",
+		"settings": "itSettings"
+	}
+}

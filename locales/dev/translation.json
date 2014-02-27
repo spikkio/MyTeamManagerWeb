@@ -1,0 +1,40 @@
+{
+	"app": {
+		"name": "My Team Manager"
+	},
+
+	"loginLabel": {
+		"username": "devLogin",
+		"password": "devPassword",
+		"usernamePlaceholder": "devUsername",
+		"passwordPlaceholder": "devPassword",
+		"submitButton": "devSubmit",
+		"popoverText": "devUnknown user and/or password mismatch"
+	},
+
+	"errorModal": {
+		"title": "devError",
+		"errorMessage": "The application faced an unexpected error...",
+		"errorType1": "Error Type 1 detected",
+		"close": "devClose"
+	},
+
+	"loadingModal": {
+		"message": "devLoading..."
+	},
+
+	"headerDiv": {
+		"account": "devAccount:",
+		"logout": "devLogout"
+	},
+
+	"navLabel": {
+		"home": "devHome",
+		"team": "devTeam",
+		"match": "devMatch",
+		"training": "devTraining",
+		"message": "devMessage",
+		"facebook": "devFacebook",
+		"settings": "devSettings"
+	}
+}

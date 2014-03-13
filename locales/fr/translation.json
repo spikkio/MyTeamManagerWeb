@@ -4,37 +4,85 @@
 	},
 
 	"loginLabel": {
-		"username": "frLogin",
-		"password": "frPassword",
-		"usernamePlaceholder": "frUsername",
-		"passwordPlaceholder": "frPassword",
-		"submitButton": "frSubmit",
-		"popoverText": "frUnknown user and/or password mismatch"
+		"username": "Login_fr_",
+		"password": "Password_fr_",
+		"usernamePlaceholder": "Username_fr_",
+		"passwordPlaceholder": "Password_fr_",
+		"submitButton": "Submit_fr_",
+		"popoverText": "Unknown user and/or password mismatch_fr_"
 	},
 
-	"errorModal": {
-		"title": "frError",
-		"errorMessage": "frThe application faced an unexpected error...",
-		"errorType1": "frError Type 1 detected",
-		"close": "frClose"
+	"infoModal": {
+		"titleTypeError": "Error_fr_",
+		"titleTypeAlert": "Alert_fr_",
+		"titleTypeInfo": "Info_fr_",
+		"messageTypeError1": "Error Type 1 detected_fr_",
+		"messageTypeError2": "Error Type 2 detected_fr_",
+		"close": "Close_fr_"
 	},
 
 	"loadingModal": {
-		"message": "frLoading..."
+		"message": "Loading..._fr_"
 	},
 
 	"headerDiv": {
-		"account": "frAccount:",
-		"logout": "frLogout"
+		"account": "Account:_fr_",
+		"logout": "Logout_fr_"
 	},
 
 	"navLabel": {
-		"home": "Home",
-		"team": "Equipe",
-		"training": "Entraînement",
-		"match": "Jeux",
-		"message": "Message",
-		"facebook": "Facebook",
-		"settings": "Paramètres"
+		"home": "Home_fr_",
+		"team": "Team_fr_",
+		"match": "Match_fr_",
+		"training": "Training_fr_",
+		"message": "Message_fr_",
+		"facebook": "Facebook_fr_",
+		"settings": "Settings_fr_"
+	},
+	
+	"teamRole": {
+		"goalkeepers": "Goalkeepers_fr_",
+		"goalkeeper": "goalkeeper_fr_",
+		"defenders": "Defenders_fr_",
+		"defender": "defender_fr_",
+		"midfielders": "Midfielders_fr_",
+		"midfielder": "midfielder_fr_",
+		"forwards": "Forwards_fr_",
+		"forward": "forward_fr_"
+	},
+	
+	"playerAttribute": {
+		"lastName": "Last name_fr_",
+		"lastNamePlaceholder": "LastName_fr_",
+		"firstName": "First name_fr_",
+		"firstNamePlaceholder": "FirstName_fr_",
+		"role": "Role_fr_",
+		"rolePlaceholder": "Role_fr_",
+		"shirt": "Shirt_fr_",
+		"phoneNumber": "Phone number_fr_",
+		"phoneNumberPlaceholder": "Phone number_fr_",
+		"emailAddress": "Email address_fr_",
+		"emailAddressPlaceholder": "Email address_fr_",
+		"dateOfBirth": "Date of birth_fr_",
+		"gamesPlayed": "Games played_fr_",
+		"goalsScored": "Goals scored_fr_",
+		"rating": "Ratin_fr_"
+	},
+	
+	"addPlayer": {
+		"savePlayerButton": "Save_fr_",	
+		"cancelAddPlayerButton": "Cancel_fr_"
+	},
+	
+	"date": {
+		"dayPlaceholder": "DD_fr_",	
+		"monthPlaceholder": "MM_fr_",
+		"yearPlaceholder": "YY_fr_",
+		"birthdatePlaceholder": "DD/MM/YYYY_fr_"
+	},
+	
+	"formValidation": {
+		"invalidBirthdateMessage": "Invalid birthdate. Please check again_fr_",
+		"requiredFieldMessage": "This is a required field_fr_"
 	}
 }

@@ -6,7 +6,56 @@
 	font-family: 'Lilita One', cursive;
 }
 
+#loggedUserName {
+	font-weight: bold;
+}
+
 #footerDiv {
 	text-align: center;
+}
+
+th, td {
+	text-align: center;
+	min-width: 90px;
+}
+
+
+#teamGoalkeepersTable th {
+	background: #2581E3;
+}
+
+#teamDefendersTable th {
+	background: #25E377;
+}
+
+#teamMidfieldersTable th {
+	background: #D6E325;
+}
+
+#teamForwardsTable th {
+	background: #E35725;
+}
+
+/*
+tbody tr:nth-child(odd) {
+   background-color: #5BC0DE;
+}
+*/
+
+.rating {
+	margin: 0px auto;
+}
+
+#addPlayerButton {
+	margin: 10px auto;
+}
+
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background-color: transparent;
+}
+
+tr.playerDetails:hover {
+	background-color: #5BC0DE;
 }
 

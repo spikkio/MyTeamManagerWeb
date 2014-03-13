@@ -6,7 +6,7 @@ mtmGufogiallo.data.init = function() {
 };
 
 mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
-	var userObj = new Parse.User();
+	var UserObj = new Parse.User();
 	var currentUser = null;
 	var result = null;
 	Parse.User.logIn( username, password, {	
@@ -30,8 +30,8 @@ mtmGufogiallo.data.login = function( username, password, callbackFunction ) {
 };
 
 mtmGufogiallo.data.getTeamId = function( userId, callbackFunction ) {
-	var userObj = Parse.Object.extend( "User" );
-	var query = new Parse.Query( userObj );
+	var UserObj = Parse.Object.extend( "User" );
+	var query = new Parse.Query( UserObj );
 	var myTeamId  = null;
 	query.equalTo( "objectId", userId );
 	query.first({
@@ -46,8 +46,8 @@ mtmGufogiallo.data.getTeamId = function( userId, callbackFunction ) {
 };
 
 mtmGufogiallo.data.getTeamName = function( teamId, callbackFunction ) {
-	var teamObj = Parse.Object.extend( "UserTeam" );
-	var query = new Parse.Query( teamObj );
+	var TeamObj = Parse.Object.extend( "UserTeam" );
+	var query = new Parse.Query( TeamObj );
 	var myTeamName  = null;
 	query.equalTo( "objectId", teamId );
 	query.first({
@@ -62,10 +62,10 @@ mtmGufogiallo.data.getTeamName = function( teamId, callbackFunction ) {
 };
 
 mtmGufogiallo.data.getTeamIdAndName= function( userId, callbackFunction ) {
-	var userObj = Parse.Object.extend( "User" );
-	var teamObj = Parse.Object.extend( "UserTeam" );
-	var userQuery = new Parse.Query( userObj );
-	var teamQuery = new Parse.Query( teamObj );
+	var UserObj = Parse.Object.extend( "User" );
+	var TeamObj = Parse.Object.extend( "UserTeam" );
+	var userQuery = new Parse.Query( UserObj );
+	var teamQuery = new Parse.Query( TeamObj );
 	var myTeamId  = null;
 	var myTeamName = null;
 	var result = null;
@@ -73,19 +73,19 @@ mtmGufogiallo.data.getTeamIdAndName= function( userId, callbackFunction ) {
 	userQuery.first({
 		success: function( user ) {
 			myTeamId = user.get( "myteam" ).id;
-		},
-		error: function(error) {
-			alert( "Error: " + error.code + " " + error.message );
-		}
-	});
-	teamQuery.equalTo( "objectId", myTeamId );
-	teamQuery.first({
-		success: function( team ) {
-			myTeamName = team.get( "name" );
-			result = new Array();
-			result[ 0 ] = myTeamId;
-			result[ 1 ] = myTeamName;
-			return callbackFunction( result );
+			teamQuery.equalTo( "objectId", myTeamId );
+			teamQuery.first({
+				success: function( team ) {
+					myTeamName = team.get( "name" );
+					result = new Array();
+					result[ 0 ] = myTeamId;
+					result[ 1 ] = myTeamName;
+					return callbackFunction( result );
+				},
+				error: function(error) {
+					alert( "Error: " + error.code + " " + error.message );
+				}
+			});
 		},
 		error: function(error) {
 			alert( "Error: " + error.code + " " + error.message );
@@ -95,10 +95,10 @@ mtmGufogiallo.data.getTeamIdAndName= function( userId, callbackFunction ) {
 
 
 mtmGufogiallo.data.getTeamPlayers = function( teamId, callbackFunction ) {
-	var playerObj = Parse.Object.extend( "Player" );
-	var teamObj = Parse.Object.extend( "UserTeam" );
-	var query = new Parse.Query( playerObj );
-	var innerQuery = new Parse.Query( teamObj );
+	var PlayerObj = Parse.Object.extend( "Player" );
+	var TeamObj = Parse.Object.extend( "UserTeam" );
+	var query = new Parse.Query( PlayerObj );
+	var innerQuery = new Parse.Query( TeamObj );
 	
 	innerQuery.equalTo( "objectId", teamId );
 	query.matchesQuery( "team", innerQuery);
@@ -117,41 +117,46 @@ mtmGufogiallo.data.getTeamPlayers = function( teamId, callbackFunction ) {
 	});
 };
 
-
-
-/*
-var mtmGufogialloData = {
-
-	if ( Parse.User.current() ) {
-		var teamId = "wCQnXiIe67"; //'Squadra A' team
-
-		var TeamParseObj = Parse.Object.extend( "UserTeam" );
-		var query = new Parse.Query( TeamParseObj );
-		query.limit(10); // limit to at most 10 results
-
-		query.equalTo( "objectId", teamId );
-		query.find({
-			success: function( results ) {
-				alert( "Successfully retrieved " + results.length + " teams." );
-			},
-			error: function( error ) {
-				alert( "Error: " + error.code + " " + error.message );
-			}
-		});
-
-		var myTeam = new TeamParseObj;
-		query.get( teamId, {
-			success: function( myTeam ) {
-				alert( "FOUND!" );
-			},	
-			error: function( myTeam, error ) {
-				alert( "Error: " + error.code + " " + error.message );
-			}
-		});
-	}
+mtmGufogiallo.data.addPlayer = function( newPlayer, successCallbackFunction, failureCallbackFunction ) {
+	var PlayerObj = Parse.Object.extend( "Player" );
+	var player = new PlayerObj;
+	var TeamObj = Parse.Object.extend( "UserTeam" );
+	var team = new TeamObj;
+	team.id = newPlayer.teamId;
 	
+	
+	player.set( "last_name", newPlayer.lastName );
+	player.set( "name", newPlayer.firstName );
+	player.set( "phone", newPlayer.phoneNumber );
+	player.set( "email", newPlayer.emailAddress );
+	player.set( "role", newPlayer.role );
+	player.set( "shirt_number", newPlayer.shirtNumber );
+	player.set( "birth_date", newPlayer.birthdateLong );
+	player.set( "goal_scored", 0 );
+	player.set( "game_played", 0 );
+	player.set( "is_deleted", 0 );
+	player.set( "event_presences", 0 );
+	player.set( "events_total_number", 0 );
+	player.set( "rating", 0 );
+	player.set( "team", team );
+	player.set( "in_current_season", true );
+	player.setACL(new Parse.ACL(Parse.User.current()));
+
+	player.save( null, {
+		success: function( player ) {
+			// Execute any logic that should take place after the object is saved.
+			return successCallbackFunction( player.id );
+		},
+		error: function( error ) {
+			// Execute any logic that should take place if the save fails.
+			// error is a Parse.Error with an error code and description.
+			return failureCallbackFunction( error.code );
+		}
+	});
 };
-*/
+
+
+
 
 
 

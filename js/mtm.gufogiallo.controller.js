@@ -1,5 +1,6 @@
 mtmGufogiallo.namespace("controller");
 
+
 mtmGufogiallo.controller.init = function() {
 	mtmGufogiallo.controller.appController = Sammy( "#workAreaDiv", function() {
 		//console.log("Sammy controller initialized");
@@ -24,7 +25,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/homePane.mustache', { paneName: 'Home' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/login" );
 			}
@@ -41,10 +45,11 @@ mtmGufogiallo.controller.init = function() {
 			context.render( 'templates/loginForm.mustache', { } )
 				.swap( context.$element() )
 				.then( function() {
+					window.scrollTo(0, 0);	
 					//Event handlers - wiring
-					jQuery( "#loginButton" ).on( "click", mtmGufogiallo.loginHandler ) ;
+					jQuery( "#loginButton" ).on( "click", mtmGufogiallo.controller.loginHandler ) ;
 
-					jQuery( "#logoutButton" ).on( "click", mtmGufogiallo.logoutHandler );
+					jQuery( "#logoutButton" ).on( "click", mtmGufogiallo.controller.logoutHandler );
 
 					//Popover for wrong username - setup
 					jQuery( "#usernameInput" ).on( "focus input", function () {
@@ -81,7 +86,7 @@ mtmGufogiallo.controller.init = function() {
 				jQuery( "#teamPaneAnchor" ).addClass( "active" );
 				
 				if ( mtmGufogiallo.currentTeamId !== null ) {
-					mtmGufogiallo.showLoadingModal();
+					mtmGufogiallo.controller.showLoadingModal();
 					mtmGufogiallo.data.getTeamPlayers( mtmGufogiallo.currentTeamId, function( result ) {
 						//alert( "Found " + result.length + " players in this team");
 						teamPlayers = result;
@@ -111,7 +116,8 @@ mtmGufogiallo.controller.init = function() {
 						})
 							.swap( context.$element() )
 							.then( function() {
-								jQuery( "#addPlayerButton" ).on( "click", mtmGufogiallo.addPlayerHandler ) ;
+								window.scrollTo(0, 0);
+								jQuery( "#addPlayerButton" ).on( "click", mtmGufogiallo.controller.addPlayerHandler ) ;
 								jQuery( "#teamGoalkeepersTable" ).tablesorter({
 									headers: { 
 										//disable sorting on  'rating' (column 4)
@@ -138,7 +144,7 @@ mtmGufogiallo.controller.init = function() {
 								});
 							});
 					});
-					mtmGufogiallo.hideLoadingModal();
+					mtmGufogiallo.controller.hideLoadingModal();
 				}
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
@@ -156,7 +162,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/matchPane.mustache', { "paneName": 'Match' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -173,7 +182,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/trainingPane.mustache', { "paneName": 'Training' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -190,7 +202,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/messagePane.mustache', { "paneName": 'Message' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -207,7 +222,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/facebookPane.mustache', { "paneName": 'Facebook' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -224,7 +242,10 @@ mtmGufogiallo.controller.init = function() {
 				
 				//show selectedPane
 				context.render( 'templates/settingsPane.mustache', { "paneName": 'Settings' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo(0, 0);	
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -237,10 +258,18 @@ mtmGufogiallo.controller.init = function() {
 							
 				//show selectedPane
 				context.render( 'templates/addPlayer.mustache', { "paneName": 'Add player' } )
-					.swap( context.$element() );
+					.swap( context.$element() )
+					.then( function() {
+						window.scrollTo( 0, 0 );
+					});
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
+		});
+		
+		this.post('#/addPlayer', function( context ) {
+			console.log( "Controller: addPlayer POST" );
+			mtmGufogiallo.controller.appController.setLocation( "#/team" );
 		});
 		
 		this.get('#/editPlayer', function( context ) {
@@ -266,7 +295,6 @@ mtmGufogiallo.controller.init = function() {
 					return vars;
 				}
 				*/
-				
 				context.render( 'templates/editPlayer.mustache', { "paneName": 'Edit player' } )
 					.swap( context.$element() );
 			} else {
@@ -283,4 +311,149 @@ mtmGufogiallo.controller.init = function() {
 	});
 	
 	mtmGufogiallo.controller.appController.run( '#/' );
+};
+
+//eventHandlers
+/**
+ * Shows a modal while loading resources
+ *
+ * @function 
+ */
+mtmGufogiallo.controller.showLoadingModal = function () {
+	jQuery( "#loadingModal" ).modal();
+};
+
+
+/**
+ * Hides the modal while loading resources
+ *
+ * @function 
+ */  
+mtmGufogiallo.controller.hideLoadingModal = function () {
+	jQuery( "#loadingModal" ).modal( 'hide' );
+};
+
+
+/**
+ * Shows a modal with customizable text
+ *
+ * @function 
+ * @param titleType - should be something like "infoModal.titleTypeError", as per locale file
+ * @param messageType - should be something like "infoModal.messageType1", as per locale file
+ * @param redirectTargetPage - a URL where the app will be redirected after the modal is closed
+ */
+mtmGufogiallo.controller.showInfoModal = function ( titleType, messageType, redirectTargetPage) {
+	//titleType should be something like "infoModal.titleType1", as per locale file
+	//messageType should be something like "infoModal.messageType1", as per locale file
+	jQuery( "#infoModal .modal-header h4").attr( "data-i18n", titleType );
+	jQuery( "#infoModal .modal-body p").attr( "data-i18n", messageType );
+	jQuery( "#infoModal .modal-footer button").on( "click", function( event ) {
+		jQuery( "#infoModal" ).modal( 'hide' );
+		if ( redirectTargetPage ) { // has a redirect page been specified? Then go there
+			mtmGufogiallo.controller.appController.setLocation( redirectTargetPage );
+		}
+	});
+	jQuery( "#infoModal" ).i18n();
+	jQuery( "#infoModal" ).modal();
+};
+
+
+/**
+ * Handles the login process
+ * 
+ * @function 
+ * @param event - the event to be handled
+ */
+mtmGufogiallo.controller.loginHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	var username = jQuery( "#usernameInput" ).val();
+	var password = jQuery( "#passwordInput" ).val();
+	//Show loading modal
+	mtmGufogiallo.controller.showLoadingModal();
+	mtmGufogiallo.data.login( username, password, function( result ) {
+		mtmGufogiallo.controller.hideLoadingModal();
+		if ( result instanceof Array )  {
+			//Login successful - prepare view
+			mtmGufogiallo.currentUsername = result[ 0 ];
+			mtmGufogiallo.currentUserId = result[ 1 ];
+			console.log( "logging with username '" + mtmGufogiallo.currentUsername + "'" );
+			jQuery( "#loggedUserName" ).text( mtmGufogiallo.currentUsername );
+			jQuery( "#loggedUser" ).show();
+			jQuery( "#logoutButton" ).show();
+			jQuery("#navDiv").show();
+			jQuery( "#loginDiv > form > div").removeClass( "has-error" );
+			mtmGufogiallo.controller.appController.setLocation( "#/" );
+		} else {
+			//Login failed
+			jQuery( "#loginDiv > form > div").addClass( "has-error" );
+			jQuery( "#usernameInput").popover('show');
+		}
+	});		
+};
+
+/**
+ * Handles the logout process
+ * 
+ * @function 
+ * @param event - the event to be handled
+ */
+mtmGufogiallo.controller.logoutHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	//Reset view and logout
+	mtmGufogiallo.currentUsername = null;
+	mtmGufogiallo.currentUserId = null;
+	mtmGufogiallo.currentTeamId = null;
+	mtmGufogiallo.currentTeamName = null;
+	mtmGufogiallo.controller.appController.setLocation( "#/login" );
+};
+
+/**
+ * Handles the creation of a new player
+ * 
+ * @function 
+ * @param event - the event to be handled
+ */
+mtmGufogiallo.controller.addPlayerHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	mtmGufogiallo.controller.appController.setLocation( "#/addPlayer" );
+};
+
+mtmGufogiallo.controller.savePlayerHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	var birthdateString = jQuery( "#birthdate" ).val();
+	var newPlayer = {
+		lastName: jQuery( "#lastName" ).val(),
+		firstName: jQuery( "#firstName" ).val(),
+		phoneNumber: jQuery( "#phoneNumber" ).val(),
+		emailAddress: jQuery( "#emailAddress" ).val(),
+		role: Number(jQuery( "#role" ).find(":selected").attr("value")),
+		shirtNumber: Number(jQuery( "#shirtNumber" ).find(":selected").attr("value")),
+		birthdateLong: new Date( birthdateString.split("/")[2], birthdateString.split("/")[1] , birthdateString.split("/")[0], 0, 0, 0, 0).getTime(),
+		eventPresencesNumber: 0,
+		rating: 0,
+		teamId: mtmGufogiallo.currentTeamId
+	}
+	mtmGufogiallo.data.addPlayer( newPlayer, 
+		function success( result ) {
+			//New player has been saved
+			console.log( "New player saved with ID: " + result );
+			mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeInfo", "infoModal.messagePlayerAdded" );
+			//mtmGufogiallo.controller.appController.setLocation( "#/team" );			
+		}, 
+		function failure( errorCode ) {
+			//Ouch! We have an error
+			mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeError", "infoModal.messageTypeError1" );
+			//mtmGufogiallo.controller.appController.setLocation( "#/team" );
+		}
+	);
+};
+
+mtmGufogiallo.controller.cancelAddPlayerHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	mtmGufogiallo.controller.appController.setLocation( "#/team" );
 };

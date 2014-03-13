@@ -4,37 +4,86 @@
 	},
 
 	"loginLabel": {
-		"username": "devLogin",
-		"password": "devPassword",
-		"usernamePlaceholder": "devUsername",
-		"passwordPlaceholder": "devPassword",
-		"submitButton": "devSubmit",
-		"popoverText": "devUnknown user and/or password mismatch"
+		"username": "Login_dev_",
+		"password": "Password_dev_",
+		"usernamePlaceholder": "Username_dev_",
+		"passwordPlaceholder": "Password_dev_",
+		"submitButton": "Submit_dev_",
+		"popoverText": "Unknown user and/or password mismatch_dev_"
 	},
 
-	"errorModal": {
-		"title": "devError",
-		"errorMessage": "The application faced an unexpected error...",
-		"errorType1": "Error Type 1 detected",
-		"close": "devClose"
+	"infoModal": {
+		"titleTypeError": "Error_dev_",
+		"titleTypeAlert": "Alert_dev_",
+		"titleTypeInfo": "Info_dev_",
+		"messagePlayerAdded": "Saved!_dev_",
+		"messageTypeError1": "Error Type 1 detected_dev_",
+		"messageTypeError2": "Error Type 2 detected_dev_",
+		"close": "Close_dev_"
 	},
 
 	"loadingModal": {
-		"message": "devLoading..."
+		"message": "Loading..._dev_"
 	},
 
 	"headerDiv": {
-		"account": "devAccount:",
-		"logout": "devLogout"
+		"account": "Account:_dev_",
+		"logout": "Logout_dev_"
 	},
 
 	"navLabel": {
-		"home": "devHome",
-		"team": "devTeam",
-		"match": "devMatch",
-		"training": "devTraining",
-		"message": "devMessage",
-		"facebook": "devFacebook",
-		"settings": "devSettings"
+		"home": "Home_dev_",
+		"team": "Team_dev_",
+		"match": "Match_dev_",
+		"training": "Training_dev_",
+		"message": "Message_dev_",
+		"facebook": "Facebook_dev_",
+		"settings": "Settings_dev_"
+	},
+	
+	"teamRole": {
+		"goalkeepers": "Goalkeepers_dev_",
+		"goalkeeper": "goalkeeper_dev_",
+		"defenders": "Defenders_dev_",
+		"defender": "defender_dev_",
+		"midfielders": "Midfielders_dev_",
+		"midfielder": "midfielder_dev_",
+		"forwards": "Forwards_dev_",
+		"forward": "forward_dev_"
+	},
+	
+	"playerAttribute": {
+		"lastName": "Last name_dev_",
+		"lastNamePlaceholder": "LastName_dev_",
+		"firstName": "First name_dev_",
+		"firstNamePlaceholder": "FirstName_dev_",
+		"role": "Role_dev_",
+		"rolePlaceholder": "Role_dev_",
+		"shirt": "Shirt_dev_",
+		"phoneNumber": "Phone number_dev_",
+		"phoneNumberPlaceholder": "Phone number_dev_",
+		"emailAddress": "Email address_dev_",
+		"emailAddressPlaceholder": "Email address_dev_",
+		"dateOfBirth": "Date of birth_dev_",
+		"gamesPlayed": "Games played_dev_",
+		"goalsScored": "Goals scored_dev_",
+		"rating": "Rating_dev_"
+	},
+	
+	"addPlayer": {
+		"savePlayerButton": "Save_dev_",	
+		"cancelAddPlayerButton": "Cancel_dev_"
+	},
+	
+	"date": {
+		"dayPlaceholder": "DD_dev_",	
+		"monthPlaceholder": "MM_dev_",
+		"yearPlaceholder": "YY_dev_",
+		"birthdatePlaceholder": "DD/MM/YYYY_dev_"
+	},
+	
+	"formValidation": {
+		"invalidBirthdateMessage": "Invalid birthdate. Please check again_dev_",
+		"requiredFieldMessage": "This is a required field_dev_"
 	}
 }

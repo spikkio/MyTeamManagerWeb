@@ -5,11 +5,7 @@
  */
 var mtmGufogiallo = {
 
-	currentUsername:  null,
-	currentUserId: null,
-	currentTeamId: null,
-	currentTeamName : null,
-	UIrefresh: false,
+	currentUser: null,
 	
 	//Namespace handling function
     namespace: function( ns ) {
@@ -49,7 +45,6 @@ var mtmGufogiallo = {
 		mtmGufogiallo.data.init();
 		//Initialize controller component
 		mtmGufogiallo.controller.init();
-		mtmGufogiallo.UIRefresh = true;
 		console.log( "ready!" );
 	}
 };

@@ -20,20 +20,36 @@ th, td {
 }
 
 
-#teamGoalkeepersTable th {
+#teamGoalkeepersTable th.playerRole {
+	color: white;
+	font-size:125%;
 	background: #2581E3;
+	background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+	background-size: 50px 50px;
 }
 
-#teamDefendersTable th {
+#teamDefendersTable th.playerRole {
+	color: white;
+	font-size:125%;
 	background: #25E377;
+	background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+	background-size: 50px 50px;
 }
 
-#teamMidfieldersTable th {
+#teamMidfieldersTable th.playerRole {
+	color: white;
+	font-size:125%;
 	background: #D6E325;
+	background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+	background-size: 50px 50px;
 }
 
-#teamForwardsTable th {
+#teamForwardsTable th.playerRole {
+	color: white;
+	font-size:125%;
 	background: #E35725;
+	background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+	background-size: 50px 50px;
 }
 
 /*
@@ -57,5 +73,16 @@ tbody tr:nth-child(odd) {
 
 tr.playerDetails:hover {
 	background-color: #5BC0DE;
+}
+
+#alert {
+	display: table;
+	position: fixed;
+	top: 50px;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+	text-align: center;
+	line-height: 60px;
 }
 

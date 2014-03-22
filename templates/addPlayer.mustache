@@ -23,36 +23,17 @@
 		<div class="form-group">
 			<label for="shirtNumber" data-i18n="playerAttribute.shirt">Shirt</label>
 			<select id="shirtNumber" class="form-control">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-				<option value="11">11</option>
-				<option value="12">12</option>
-				<option value="13">13</option>
-				<option value="14">14</option>
-				<option value="15">15</option>
-				<option value="16">16</option>
-				<option value="17">17</option>
-				<option value="18">18</option>
-				<option value="19">19</option>
-				<option value="20">20</option>
-				<option value="21">21</option>
-				<option value="22">22</option>
-				<option value="23">23</option>
-				<option value="24">24</option>
-				<option value="25">25</option>
-				<option value="26">26</option>
-				<option value="27">27</option>
-				<option value="28">28</option>
-				<option value="29">29</option>
-				<option value="30">30</option>
+				<option value="" data-i18n="playerAttribute.shirtNumberNotSpecified">Not specified</option>
+			<script>
+				//add options for shirtNumber ranging from 1 to 99
+				var node = document.getElementById( 'shirtNumber' );
+				for (var i = 1; i < 100; i++ ) {
+					var opt = document.createElement( 'option' );
+					opt.value = i;
+					opt.innerHTML = i;
+					node.appendChild(opt);
+				}
+			</script>
 			</select>
 		</div>
 		<div class="form-group">
@@ -70,40 +51,9 @@
 			<input id="birthdateMonth" type="tel" maxlength="2" placeholder="MM" data-i18n="[placeholder]date.monthPlaceholder" data-validation="number" data-validation-optional="true" data-validation-allowing="range[1;12]"></input>
 			<input id="birthdateYear" type="tel" maxlength="4" placeholder="YYYY" data-i18n="[placeholder]date.yearPlaceholder" data-validation="number" data-validation-optional="true" data-validation-allowing="range[1900;2013]"></input>
 			-->
-			<input id="birthdate" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]date.birthdatePlaceholder" data-validation="birthdate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
+			<input id="birthdate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]date.birthdatePlaceholder" data-validation="birthdate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
 		</div>
 		<button id="savePlayerButton" type="submit" class="btn btn-info" data-i18n="addPlayer.savePlayerButton">Save</button>
 		<button id="cancelAddPlayerButton" type="button" class="btn btn-default" data-i18n="addPlayer.cancelAddPlayerButton">Cancel</button>
 	</form>
 </div>
-
-
-<script> 
-	// Form validation
-	jQuery( "#birthdate").attr( "data-validation-error-msg", function() {
-		return i18n.t("formValidation.invalidBirthdateMessage");
-	});
-	jQuery( "#lastName").attr( "data-validation-error-msg", function() {
-		return i18n.t("formValidation.requiredFieldMessage");
-	});
-	
-	//Event handlers - wiring						
-	//jQuery( "#savePlayerButton" ).on( "click",  mtmGufogiallo.controller.savePlayerHandler );
-	jQuery( "#savePlayerButton" ).on( "click",  jQuery.validate(
-		{
-			form: "#addPlayerForm",
-			modules : "date, security",
-			validateOnBlur : true,
-			onError: function() {
-				console.log( "validation failed" );
-				//scroll vertically to input field where the validation error is
-				window.scrollTo( 0, jQuery( ".error" ).scrollTop() );	
-			},
-			onSuccess: function() {
-				console.log( "validation succeded" );
-				mtmGufogiallo.controller.savePlayerHandler( jQuery.Event( "click" ) );
-			}
-		}
-	));
-	jQuery( "#cancelAddPlayerButton" ).on( "click",  mtmGufogiallo.controller.cancelAddPlayerHandler );	
-</script>

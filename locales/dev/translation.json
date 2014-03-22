@@ -21,6 +21,11 @@
 		"messageTypeError2": "Error Type 2 detected_dev_",
 		"close": "Close_dev_"
 	},
+	
+	"alert": {
+		"messagePlayerAdded": "Saved player with ID:_dev_ ",
+		"messagePlayerUpdated": "Player updated_dev_ "
+	},
 
 	"loadingModal": {
 		"message": "Loading..._dev_"
@@ -60,6 +65,7 @@
 		"role": "Role_dev_",
 		"rolePlaceholder": "Role_dev_",
 		"shirt": "Shirt_dev_",
+		"shirtNumberNotSpecified": "Not specified_dev_",
 		"phoneNumber": "Phone number_dev_",
 		"phoneNumberPlaceholder": "Phone number_dev_",
 		"emailAddress": "Email address_dev_",
@@ -70,9 +76,11 @@
 		"rating": "Rating_dev_"
 	},
 	
-	"addPlayer": {
+	"editPlayer": {
 		"savePlayerButton": "Save_dev_",	
-		"cancelAddPlayerButton": "Cancel_dev_"
+		"deletePlayerButton": "Delete_dev_",	
+		"cancelAddPlayerButton": "Cancel_dev_",
+		"updatePlayerButton": "Update_dev_"
 	},
 	
 	"date": {

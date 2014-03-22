@@ -2,4 +2,71 @@
 
 <div id="editPlayerPage">
 	<h2>This is the {{paneName}} page</h2>
+	<form role="form" id="editPlayerForm" action="#/editPlayer" method="post">
+		<div class="form-group">
+			<label for="lastName" data-i18n="playerAttribute.lastName">Last name</label>
+			<input type="text" class="form-control" id="lastName" placeholder="Last name" data-i18n="[placeholder]playerAttribute.lastNamePlaceholder" data-validation="required" value="{{selectedPlayer.lastName}}"></input>
+		</div>
+		<div class="form-group">
+			<label for="firstName" data-i18n="playerAttribute.firstName">Name</label>
+			<input type="text" class="form-control" id="firstName" placeholder="First name" data-i18n="[placeholder]playerAttribute.firstNamePlaceholder" value="{{selectedPlayer.firstName}}"></input>
+		</div>
+		<div class="form-group">
+			<label for="role" data-i18n="playerAttribute.role">Role</label>
+			<select id="role" class="form-control">
+				<option value="0" data-i18n="teamRole.goalkeeper">Goalkeeper</option>
+				<option value="1" data-i18n="teamRole.defender">Defender</option>
+				<option value="2" data-i18n="teamRole.midfielder">Midfielder</option>
+				<option value="3" data-i18n="teamRole.forward">Forward</option>
+			</select>
+			<script>
+				//let the role already assigned to the player be selected by default
+				jQuery("option[value={{selectedPlayer.role}}]").attr( "selected", "selected");
+			</script>
+		</div>
+		<div class="form-group">
+			<label for="shirtNumber" data-i18n="playerAttribute.shirt">Shirt</label>
+			<select id="shirtNumber" class="form-control">
+				<option value="" data-i18n="playerAttribute.shirtNumberNotSpecified">Not specified</option>
+			<script>
+				//add options for shirtNumber ranging from 1 to 99
+				var node = document.getElementById( 'shirtNumber' );
+				for (var i = 1; i < 100; i++ ) {
+					var opt = document.createElement( 'option' );
+					opt.value = i;
+					opt.innerHTML = i;
+					node.appendChild(opt);
+				}
+			</script>
+			<script>
+				//let the shirt number already assigned to the player be selected by default
+				jQuery("option[value={{selectedPlayer.shirtNumber}}]").attr( "selected", "selected");
+			</script>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="phoneNumber" data-i18n="playerAttribute.phoneNumber">Phone number (optional)</label>
+			<input type="tel" class="form-control" id="phoneNumber" placeholder="Phone number" data-i18n="[placeholder]playerAttribute.phoneNumberPlaceholder" value="{{selectedPlayer.phoneNumber}}"></input>
+		</div>
+		<div class="form-group">
+			<label for="emailAddress" data-i18n="playerAttribute.emailAddress">Email address (optional)</label>
+			<input type="email" class="form-control" id="emailAddress" placeholder="Email address" data-i18n="[placeholder]playerAttribute.emailAddressPlaceholder" value="{{selectedPlayer.emailAddress}}"></input>
+		</div>
+		<div class="form-group">
+			<label for="birthdate" data-i18n="playerAttribute.dateOfBirth">Date of Birth:</label>
+			<input id="birthdate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]date.birthdatePlaceholder" data-validation="birthdate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
+			<script>
+				/*Calculate day, month and year of the birthdate*/
+				var birthDateInMilliseconds = {{selectedPlayer.birthDate}};
+				var date = new Date( birthDateInMilliseconds );
+				var day = date.getDate();
+				var month = date.getMonth();
+				var year = date.getFullYear();
+				jQuery("#birthdate").val( day + "/" + month + "/" + year );
+			</script>
+		</div>
+		<button id="updatePlayerButton" type="submit" class="btn btn-info" data-i18n="editPlayer.updatePlayerButton">Save</button>
+		<button id="deletePlayerButton" type="button" class="btn btn-warning" data-i18n="editPlayer.deletePlayerButton">Delete</button>
+		<button id="cancelEditPlayerButton" type="button" class="btn btn-default" data-i18n="editPlayer.cancelAddPlayerButton">Cancel</button>
+	</form>
 </div>

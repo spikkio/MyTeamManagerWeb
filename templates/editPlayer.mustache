@@ -39,8 +39,10 @@
 				}
 			</script>
 			<script>
-				//let the shirt number already assigned to the player be selected by default
-				jQuery("option[value={{selectedPlayer.shirtNumber}}]").attr( "selected", "selected");
+				//let the shirt number already assigned to the player be selected by default, unless shirtNumber is not specified
+				if ( {{selectedPlayer.shirtNumber}} !== 0 ) {
+					jQuery("option[value={{selectedPlayer.shirtNumber}}]").attr( "selected", "selected");
+				}
 			</script>
 			</select>
 		</div>
@@ -54,19 +56,21 @@
 		</div>
 		<div class="form-group">
 			<label for="birthdate" data-i18n="playerAttribute.dateOfBirth">Date of Birth:</label>
-			<input id="birthdate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]date.birthdatePlaceholder" data-validation="birthdate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
+			<input id="birthdate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]datetime.datePlaceholder" data-validation="birthdate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
 			<script>
-				/*Calculate day, month and year of the birthdate*/
-				var birthDateInMilliseconds = {{selectedPlayer.birthDate}};
-				var date = new Date( birthDateInMilliseconds );
-				var day = date.getDate();
-				var month = date.getMonth();
-				var year = date.getFullYear();
-				jQuery("#birthdate").val( day + "/" + month + "/" + year );
+				/*Calculate day, month and year of the birthdate, if birthdate is specified*/
+				{{#selectedPlayer.birthDate}}
+					var birthDateInMilliseconds = {{selectedPlayer.birthDate}};
+					var date = new Date( birthDateInMilliseconds );
+					var day = date.getDate();
+					var month = date.getMonth() +1;
+					var year = date.getFullYear();
+					jQuery("#birthdate").val( day + "/" + month + "/" + year );
+				{{/selectedPlayer.birthDate}}
 			</script>
 		</div>
-		<button id="updatePlayerButton" type="submit" class="btn btn-info" data-i18n="editPlayer.updatePlayerButton">Save</button>
-		<button id="deletePlayerButton" type="button" class="btn btn-warning" data-i18n="editPlayer.deletePlayerButton">Delete</button>
-		<button id="cancelEditPlayerButton" type="button" class="btn btn-default" data-i18n="editPlayer.cancelAddPlayerButton">Cancel</button>
+		<button id="updatePlayerButton" type="submit" class="btn btn-info" data-i18n="buttons.updatePlayerButton">Update</button>
+		<button id="deletePlayerButton" type="button" class="btn btn-danger" data-i18n="buttons.deletePlayerButton">Delete</button>
+		<button id="cancelEditPlayerButton" type="button" class="btn btn-default" data-i18n="buttons.cancelEditPlayerButton">Cancel</button>
 	</form>
 </div>

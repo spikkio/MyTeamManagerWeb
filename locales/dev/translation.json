@@ -22,9 +22,23 @@
 		"close": "Close_dev_"
 	},
 	
-	"alert": {
+	"confirmModal": {
+		"titleTypeAlert": "Alert_dev_",
+		"titleTypeInfo": "Info_dev_",
+		"messageConfirmPlayerDelete": "This operation will permanently delete the player. Are you sure?_dev_",
+		"messageConfirmTrainingDelete": "This operation will permanently delete the training. Are you sure?_dev_",
+		"checkboxRecursiveTrainingDelete": "Delete all trainings of the same series",
+		"cancel": "Cancel_dev_",
+		"confirm": "Confirm_dev_"
+	},
+	
+	"toast": {
 		"messagePlayerAdded": "Saved player with ID:_dev_ ",
-		"messagePlayerUpdated": "Player updated_dev_ "
+		"messagePlayerUpdated": "Player updated_dev_ ",
+		"messagePlayerDeleted": "Player deleted_dev_ ",
+		"messageTrainingAdded": "Saved training(s) with ID:_dev_ ",
+		"messageTrainingUpdated": "Training updated_dev_ ",
+		"messageTrainingDeleted": "Training(s) deleted_dev_ "
 	},
 
 	"loadingModal": {
@@ -76,22 +90,48 @@
 		"rating": "Rating_dev_"
 	},
 	
-	"editPlayer": {
-		"savePlayerButton": "Save_dev_",	
-		"deletePlayerButton": "Delete_dev_",	
-		"cancelAddPlayerButton": "Cancel_dev_",
-		"updatePlayerButton": "Update_dev_"
+	"trainingAttribute": {
+		"label": "Trainings_dev_",
+		"date": "Date_dev_",
+		"time": "Time_dev_",
+		"recurrence": "Recurrence_dev_",
+		"expireDate": "Until_dev_",
+		"noRecurrence": "None_dev_",
+		"dailyRecurrence": "Every day_dev",
+		"weeklyRecurrence": "Every week_dev_",
+		"location": "Location_dev_",
+		"locationPlaceholder": "Location_dev_",
+		"note": "Note_dev_",
+		"recurrenceExpireDate": "Until date_dev_"
 	},
 	
-	"date": {
+	"buttons": {
+		"addPlayerButton": "Add player_dev",
+		"savePlayerButton": "Save_dev_",	
+		"cancelAddPlayerButton": "Cancel_dev_",
+		"deletePlayerButton": "Delete_dev_",	
+		"cancelEditPlayerButton": "Cancel_dev_",
+		"updatePlayerButton": "Update_dev_",
+		"addTrainingButton": "Add training_dev",
+		"saveTrainingButton": "Save_dev_",	
+		"cancelAddTrainingButton": "Cancel_dev_",
+		"deleteTrainingButton": "Delete_dev_",
+		"cancelEditTrainingButton": "Cancel_dev_",
+		"updateTrainingButton": "Update_dev_"
+	},
+	
+	"datetime": {
 		"dayPlaceholder": "DD_dev_",	
 		"monthPlaceholder": "MM_dev_",
 		"yearPlaceholder": "YY_dev_",
-		"birthdatePlaceholder": "DD/MM/YYYY_dev_"
+		"datePlaceholder": "DD/MM/YYYY_dev_",
+		"timePlaceholder": "hh:mm_dev_"
 	},
 	
 	"formValidation": {
 		"invalidBirthdateMessage": "Invalid birthdate. Please check again_dev_",
+		"invalidDateMessage": "Invalid date. Please check again_dev_",
+		"invalidTimeMessage": "Invalid time. Please check again_dev_",
 		"requiredFieldMessage": "This is a required field_dev_"
 	}
 }

@@ -15,19 +15,7 @@ mtmGufogiallo.controller.init = function() {
 				//set active state of navigation button
 				jQuery( "#navDiv .active" ).removeClass( "active" );
 				jQuery( "#homePaneAnchor" ).addClass( "active" );
-				
-				//***TODO*** Questa query ha ancora senso?
-				/*
-				mtmGufogiallo.data.getTeamIdAndName( mtmGufogiallo.currentUser.id, 
-					function success ( result ) {
-						mtmGufogiallo.currentUser.team = {};
-						mtmGufogiallo.currentUser.team.id = result[ 0 ];
-						mtmGufogiallo.currentUser.team.name = result[ 1 ];					
-					},
-					function failure ( errorCode) {
-						console.log( "Error!!!" + errorCode );
-					}
-				);*/
+
 				
 				//show selectedPane
 				$workAreaDiv.hide();
@@ -81,7 +69,6 @@ mtmGufogiallo.controller.init = function() {
 	
 		this.get('#/team', function( context ) {
 			console.log( "Controller: team page" );
-			var teamPlayers = null;
 			var goalkeepers = null;
 			var defenders = null;
 			var midfielders = null;
@@ -94,10 +81,26 @@ mtmGufogiallo.controller.init = function() {
 					{ 
 						"paneName": "Team", 
 						"teamId": mtmGufogiallo.currentUser.team.id,
-						"goalkeepers": mtmGufogiallo.currentUser.team.players.goalkeepers,
-						"defenders": mtmGufogiallo.currentUser.team.players.defenders,
-						"midfielders": mtmGufogiallo.currentUser.team.players.midfielders,
-						"forwards": mtmGufogiallo.currentUser.team.players.forwards
+						"goalkeepers": jQuery.grep( mtmGufogiallo.currentUser.team.players, function( player ) {
+								//round the rating visually to the nearest 0.5 (i.e. number fo stars)
+								player.rating = Math.round(player.rating*2)/2;
+								return player.role === 0;
+							}),
+						"defenders": jQuery.grep( mtmGufogiallo.currentUser.team.players, function( player ) {
+								//round the rating visually to the nearest 0.5 (i.e. number fo stars)
+								player.rating = Math.round(player.rating*2)/2;
+								return player.role === 1;
+							}),
+						"midfielders": jQuery.grep( mtmGufogiallo.currentUser.team.players, function( player ) {
+								//round the rating visually to the nearest 0.5 (i.e. number fo stars)
+								player.rating = Math.round(player.rating*2)/2;
+								return player.role === 2;
+							}),
+						"forwards": jQuery.grep( mtmGufogiallo.currentUser.team.players, function( player ) {
+								//round the rating visually to the nearest 0.5 (i.e. number fo stars)
+								player.rating = Math.round(player.rating*2)/2;
+								return player.role === 3;
+							})
 					})
 					.swap( context.$element() )
 					.then( 
@@ -144,26 +147,7 @@ mtmGufogiallo.controller.init = function() {
 					mtmGufogiallo.data.getTeam( mtmGufogiallo.currentUser.team.id, 
 						function success ( result ) {
 							mtmGufogiallo.currentUser.team.name = result[ 0 ];
-							teamPlayers = result[ 1 ];
-							//parse the list of teamPlayers to detect players' role
-							goalkeepers = jQuery.grep( teamPlayers, function( player ) {
-							   return player.role === 0;
-							});
-							defenders = jQuery.grep( teamPlayers, function( player ) {
-							   return player.role === 1;
-							});
-							midfielders = jQuery.grep( teamPlayers, function( player ) {
-							   return player.role === 2;
-							});
-							forwards = jQuery.grep( teamPlayers, function( player ) {
-							   return player.role === 3;
-							});
-							
-							mtmGufogiallo.currentUser.team.players = {};							
-							mtmGufogiallo.currentUser.team.players.goalkeepers = goalkeepers;
-							mtmGufogiallo.currentUser.team.players.defenders = defenders;
-							mtmGufogiallo.currentUser.team.players.midfielders = midfielders;
-							mtmGufogiallo.currentUser.team.players.forwards = forwards;
+							mtmGufogiallo.currentUser.team.players = result[ 1 ];
 							updateView();
 						},
 						function failure ( errorCode) {
@@ -205,20 +189,50 @@ mtmGufogiallo.controller.init = function() {
 		
 		this.get('#/training', function( context ) {
 			console.log( "Controller: training page" );
+			
+			function updateView() {
+				//show selectedPane
+				$workAreaDiv.hide();
+				context.render( 'templates/trainingPane.mustache', 
+					{ 
+						"paneName": "Training", 
+						"teamId": mtmGufogiallo.currentUser.team.id,
+						"trainings": mtmGufogiallo.currentUser.trainings
+					})
+					.swap( context.$element() )
+					.then( 
+						function() {
+							$workAreaDiv.fadeIn( "fast" );
+							window.scrollTo(0, 0);
+							jQuery( "#trainingTable" ).tablesorter( {
+								dateFormat: "uk",
+								sortList: [[0,0]]
+							} );
+							jQuery( "#addTrainingButton" ).on( "click", mtmGufogiallo.controller.addTrainingHandler ) ;
+						}
+					);		
+			}
 			//Check login status
 			if ( mtmGufogiallo.currentUser !== null ) {
 				//set active state of navigation button
 				jQuery( "#navDiv .active" ).removeClass( "active" );
 				jQuery( "#trainingPaneAnchor" ).addClass( "active" );
-				
-				//show selectedPane
-				$workAreaDiv.hide();
-				context.render( 'templates/trainingPane.mustache', { "paneName": 'Training' } )
-					.swap( context.$element() )
-					.then( function() {
-						$workAreaDiv.fadeIn( "fast" );
-						window.scrollTo(0, 0);	
-					});
+				if ( typeof( mtmGufogiallo.currentUser.trainings ) === "undefined" ) {
+					//the trainings are unknown yet: request them to the data layer and assign the result to the model
+					mtmGufogiallo.controller.showLoadingModal();
+					mtmGufogiallo.data.getTrainings( mtmGufogiallo.currentUser.team.id, 
+						function success ( result ) {
+							mtmGufogiallo.currentUser.trainings = result;
+							updateView();
+						},
+						function failure ( errorCode) {
+							console.log( "Error!!!" + errorCode );
+						}
+					);
+					mtmGufogiallo.controller.hideLoadingModal();
+				} else {
+					updateView();
+				}
 			} else {
 				mtmGufogiallo.controller.appController.setLocation( "#/" );
 			}
@@ -295,7 +309,7 @@ mtmGufogiallo.controller.init = function() {
 			//Check login status
 			if ( mtmGufogiallo.currentUser !== null ) {
 				//show selectedPane
-				$workAreaDiv.hide();
+				//$workAreaDiv.hide();
 				context.render( 'templates/addPlayer.mustache', { "paneName": 'Add player' } )
 					.swap( context.$element() )
 					.then( function() {
@@ -351,29 +365,10 @@ mtmGufogiallo.controller.init = function() {
 				//console.log("EDIT: "+ window.location.href.slice(window.location.href.indexOf('?') + 1).split('=')[1])
 				
 				//Search for the player id within the team players in the model
-				var selectedPlayer = [].concat(
-					mtmGufogiallo.currentUser.team.players.goalkeepers,
-					mtmGufogiallo.currentUser.team.players.defenders,
-					mtmGufogiallo.currentUser.team.players.midfielders,
-					mtmGufogiallo.currentUser.team.players.forwards
-				).filter( function (player) { return player.id == playerId } )[ 0 ];
+				var selectedPlayer = mtmGufogiallo.currentUser.team.players.filter( function (player) { 
+					return player.id == playerId 
+				})[ 0 ];
 				console.log ( selectedPlayer );
-
-				/*
-				// Read a page's GET URL variables and return them as an associative array.
-				function getUrlVars()
-				{
-					var vars = [], hash;
-					var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-					for(var i = 0; i < hashes.length; i++)
-					{
-						hash = hashes[i].split('=');
-						vars.push(hash[0]);
-						vars[hash[0]] = hash[1];
-					}
-					return vars;
-				}
-				*/
 				
 				//show selectedPane
 				$workAreaDiv.hide();
@@ -413,7 +408,7 @@ mtmGufogiallo.controller.init = function() {
 								}
 							}
 						));
-						jQuery( "#deletePlayerButton" ).on( "click", selectedPlayer.id );
+						jQuery( "#deletePlayerButton" ).on( "click", null, selectedPlayer.id, mtmGufogiallo.controller.deletePlayerHandler );
 						jQuery( "#cancelEditPlayerButton" ).on( "click",  mtmGufogiallo.controller.cancelEditPlayerHandler );	
 					});
 			} else {
@@ -422,8 +417,123 @@ mtmGufogiallo.controller.init = function() {
 		});
 		
 		this.post('#/editPlayer', function( context ) {
-			console.log( "Controller: addPlayer POST" );
+			console.log( "Controller: editPlayer POST" );
 			mtmGufogiallo.controller.appController.setLocation( "#/team" );
+		});
+
+		this.get('#/addTraining', function( context ) {
+			console.log( "Controller: addTraining page" );
+			//Check login status
+			if ( mtmGufogiallo.currentUser !== null ) {
+				//show selectedPane
+				//$workAreaDiv.hide();
+				context.render( 'templates/addTraining.mustache', { "paneName": 'Add training' } )
+					.swap( context.$element() )
+					.then( function() {
+						$workAreaDiv.fadeIn( "fast" );
+						window.scrollTo( 0, 0 );
+						//Form input masking
+						jQuery(":input").inputmask();
+						// Form validation
+						jQuery( "#trainingDate" ).attr( "data-validation-error-msg", function() {
+							return i18n.t("formValidation.invalidDateMessage");
+						});
+						jQuery( "#trainingDate" ).attr( "data-validation-error-msg", function() {
+							return i18n.t("formValidation.requiredFieldMessage");
+						});
+						
+						//Event handlers - wiring						
+						jQuery( "#saveTrainingButton" ).on( "click",  jQuery.validate(
+							{
+								form: "#addTrainingForm",
+								modules : "date, security",
+								validateOnBlur : true,
+								onError: function() {
+									console.log( "validation failed" );
+									//scroll vertically to input field where the validation error is
+									window.scrollTo( 0, jQuery( ".error" ).scrollTop() );
+								},
+								onSuccess: function() {
+									console.log( "validation succeded" );
+									mtmGufogiallo.controller.saveTrainingHandler( jQuery.Event( "click" ) );
+								}
+							}
+						));
+						jQuery( "#cancelAddTrainingButton" ).on( "click",  mtmGufogiallo.controller.cancelAddTrainingHandler );	
+					});
+			} else {
+				mtmGufogiallo.controller.appController.setLocation( "#/" );
+			}
+		});
+		
+		this.post('#/addTraining', function( context ) {
+			console.log( "Controller: addTraining POST" );
+			mtmGufogiallo.controller.appController.setLocation( "#/training" );
+		});
+
+		this.get('#/editTraining', function( context ) {
+			console.log( "Controller: editTraining page" );
+			//Check login status
+			if ( mtmGufogiallo.currentUser !== null ) {
+	
+				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				var trainingId = window.location.href.slice(window.location.href.indexOf('?') + 1).split('=')[1];
+				
+				//Search for the training id within the list of trainings in the model
+				var selectedTraining = mtmGufogiallo.currentUser.trainings.filter( function (training) { 
+					return training.id == trainingId 
+				})[ 0 ];
+				console.log ( selectedTraining );
+
+				//show selectedPane
+				$workAreaDiv.hide();
+				context.render( 'templates/editTraining.mustache', 
+				{ 
+					"paneName": 'Edit training',
+					"selectedTraining": selectedTraining
+				})
+					.swap( context.$element() )
+					.then( function() {
+						$workAreaDiv.fadeIn( "fast" );
+						window.scrollTo( 0, 0 );
+						//Form input masking
+						jQuery(":input").inputmask();
+						// Form validation
+						jQuery( "#trainingDate" ).attr( "data-validation-error-msg", function() {
+							return i18n.t("formValidation.invalidDateMessage");
+						});
+						jQuery( "#trainingTime" ).attr( "data-validation-error-msg", function() {
+							return i18n.t("formValidation.invalidTimeMessage");
+						});
+						//Event handlers - wiring						
+						//jQuery( "#savePlayerButton" ).on( "click",  mtmGufogiallo.controller.savePlayerHandler );
+						jQuery( "#updateTrainingButton" ).on( "click",  jQuery.validate(
+							{
+								form: "#editTrainingForm",
+								modules : "date, security",
+								validateOnBlur : true,
+								onError: function() {
+									console.log( "validation failed" );
+									//scroll vertically to input field where the validation error is
+									window.scrollTo( 0, jQuery( ".error" ).scrollTop() );
+								},
+								onSuccess: function() {
+									console.log( "validation succeded" );
+									mtmGufogiallo.controller.updateTrainingHandler( jQuery.Event( "click" ), selectedTraining.id );
+								}
+							}
+						));
+						jQuery( "#deleteTrainingButton" ).on( "click", null, selectedTraining.id, mtmGufogiallo.controller.deleteTrainingHandler );
+						jQuery( "#cancelEditTrainingButton" ).on( "click",  mtmGufogiallo.controller.cancelEditTrainingHandler );	
+					});
+			} else {
+				mtmGufogiallo.controller.appController.setLocation( "#/" );
+			}
+		});
+		
+		this.post('#/editTraining', function( context ) {
+			console.log( "Controller: editTraining POST" );
+			mtmGufogiallo.controller.appController.setLocation( "#/training" );
 		});
 		
 		this.get(/.*/, function( context ) {
@@ -471,7 +581,7 @@ mtmGufogiallo.controller.showInfoModal = function ( titleType, messageType, redi
 	//messageType should be something like "infoModal.messageType1", as per locale file
 	jQuery( "#infoModal .modal-header h4").attr( "data-i18n", titleType );
 	jQuery( "#infoModal .modal-body p").attr( "data-i18n", messageType );
-	jQuery( "#infoModal .modal-footer button").on( "click", function( event ) {
+	jQuery( "#infoModal .modal-footer button").one( "click", function( event ) {
 		jQuery( "#infoModal" ).modal( 'hide' );
 		if ( redirectTargetPage ) { // has a redirect page been specified? Then go there
 			mtmGufogiallo.controller.appController.setLocation( redirectTargetPage );
@@ -480,6 +590,37 @@ mtmGufogiallo.controller.showInfoModal = function ( titleType, messageType, redi
 	jQuery( "#infoModal" ).i18n();
 	jQuery( "#infoModal" ).modal();
 };
+
+
+/**
+ * Shows a modal with customizable text to confirm an operation before it is applied
+ *
+ * @function 
+ * @param titleType - should be something like "confirmModal.titleTypeAlert", as per locale file
+ * @param messageType - should be something like "confirmModal.messageConfirmPlayerDelete", as per locale file
+ * @param checkboxText - should be something like "checkboxRecursiveTrainingDelete", as per locale file
+ * @param callbackFunction - a function that is invoked when the user confirms
+ */
+mtmGufogiallo.controller.showConfirmModal = function ( titleType, messageType, checkboxText, callbackFunction) {
+	jQuery( "#confirmModal .modal-header h4").attr( "data-i18n", titleType );
+	jQuery( "#confirmModal .modal-body p").attr( "data-i18n", messageType );
+	var checkboxDiv = jQuery( "#confirmModal .modal-body #confirmModalCheckboxDiv");
+	if ( checkboxText ) {
+		checkboxDiv.find("span").attr( "data-i18n", checkboxText );
+		checkboxDiv.find("input").prop( "checked", false );
+		checkboxDiv.css( "display", "block" );
+	} else {
+		checkboxDiv.css( "display", "none" );
+	}
+	jQuery( "#confirmModal .modal-footer #confirmButton").one( "click", function( event ) {
+		jQuery( "#confirmModal" ).modal( 'hide' );
+		//The callback is invoked with the value (true or false) of the checkbox status
+		callbackFunction( jQuery( "#confirmModalCheckbox").is(':checked') );
+	});
+	jQuery( "#confirmModal" ).i18n();
+	jQuery( "#confirmModal" ).modal();
+};
+
 
 /**
  * Shows an alert with customizable text that fades in, stays and then fades out
@@ -581,7 +722,7 @@ mtmGufogiallo.controller.savePlayerHandler = function( event ) {
 		emailAddress: jQuery( "#emailAddress" ).val(),
 		role: Number(jQuery( "#role" ).find(":selected").attr("value")),
 		shirtNumber: Number(jQuery( "#shirtNumber" ).find(":selected").attr("value")),
-		birthdateLong: new Date( birthdateString.split("/")[2], birthdateString.split("/")[1] , birthdateString.split("/")[0], 0, 0, 0, 0).getTime(),
+		birthdateLong: new Date( birthdateString.split("/")[2], birthdateString.split("/")[1] -1 , birthdateString.split("/")[0], 0, 0, 0, 0).getTime(),
 		eventPresencesNumber: 0,
 		rating: 0,
 		gamesPlayed: 0,
@@ -593,46 +734,16 @@ mtmGufogiallo.controller.savePlayerHandler = function( event ) {
 			//New player has been saved
 			console.log( "New player saved with ID: " + result );			
 			newPlayer.id = result;
-			switch(newPlayer.role)
-			{
-				case 0:
-					//Added a goalkeeper
-					if ( typeof( mtmGufogiallo.currentUser.team.players.goalkeepers ) === "undefined" ) {
-						//this is our first goalkeeper, so let's initialize the goalkeepers array
-						mtmGufogiallo.currentUser.team.players.goalkeepers = [];
-					}		
-					mtmGufogiallo.currentUser.team.players.goalkeepers.push(newPlayer);
-					break;
-				case 1:
-					//Added a defender
-					if ( typeof( mtmGufogiallo.currentUser.team.players.defenders ) === "undefined" ) {
-						//this is our first defender, so let's initialize the defenders array
-						mtmGufogiallo.currentUser.team.players.defenders = [];
-					}		
-					mtmGufogiallo.currentUser.team.players.defenders.push(newPlayer);
-					break;
-				case 2:
-					//Added a midfielder
-					if ( typeof( mtmGufogiallo.currentUser.team.players.midfielders ) === "undefined" ) {
-						//this is our first midfielder, so let's initialize the midfielders array
-						mtmGufogiallo.currentUser.team.players.midfielders = [];
-					}		
-					mtmGufogiallo.currentUser.team.players.midfielders.push(newPlayer);
-					break;
-				case 3:
-					//Added a forward
-					if ( typeof( mtmGufogiallo.currentUser.team.players.forwards ) === "undefined" ) {
-						//this is our first forward, so let's initialize the forwards array
-						mtmGufogiallo.currentUser.team.players.forwards = [];
-					}		
-					mtmGufogiallo.currentUser.team.players.forwards.push(newPlayer);
-					break;
-				default:
-			}
+			if ( typeof( mtmGufogiallo.currentUser.team.players ) === "undefined" ) {
+				//this is our first player, so let's initialize the players array
+				mtmGufogiallo.currentUser.team.players = [];
+			}		
+			mtmGufogiallo.currentUser.team.players.push( newPlayer );
+		
 			//mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeInfo", "infoModal.messagePlayerAdded" );
 		
 			mtmGufogiallo.controller.refreshUI( "#/team" );
-			mtmGufogiallo.controller.showAlert( "alert.messagePlayerAdded",  newPlayer.id );
+			mtmGufogiallo.controller.showAlert( "toast.messagePlayerAdded",  newPlayer.id );
 		}, 
 		function failure( errorCode ) {
 			//Ouch! We have an error
@@ -653,67 +764,31 @@ mtmGufogiallo.controller.updatePlayerHandler = function( event, playerId ) {
 		emailAddress: jQuery( "#emailAddress" ).val(),
 		role: Number(jQuery( "#role" ).find(":selected").attr("value")),
 		shirtNumber: Number(jQuery( "#shirtNumber" ).find(":selected").attr("value")),
-		birthdateLong: new Date( birthdateString.split("/")[2], birthdateString.split("/")[1] , birthdateString.split("/")[0], 0, 0, 0, 0).getTime(),
+		birthdateLong: new Date( birthdateString.split("/")[2], birthdateString.split("/")[1]-1, birthdateString.split("/")[0], 0, 0, 0, 0).getTime()
 	}
 	mtmGufogiallo.data.updatePlayer( playerId, updatedPlayerData, 
 		function success( result ) {
 			//Player has been successfully updated
 			console.log( "Player has been successfully updated" );			
 			updatedPlayerData.id = result;
-			/***TODO*** Handle case where the player role has changed!! */
-			
-			function updateData ( playerArray, index ) {
-				playerArray[ index ].lastName = updatedPlayerData.lastName;
-				playerArray[ index ].firstName = updatedPlayerData.firstName;
-				playerArray[ index ].phoneNumber = updatedPlayerData.phoneNumber;
-				playerArray[ index ].emailAddress = updatedPlayerData.emailAddress;
-				playerArray[ index ].shirtNumber = updatedPlayerData.shirtNumber;
-				playerArray[ index ].birthDate = updatedPlayerData.birthdateLong;
-			}
-			
-			if ( typeof (mtmGufogiallo.currentUser.team.players.goalkeepers) !== "undefined" ) {
-				for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.goalkeepers.length; i++ )
+			//update player in model
+			if ( typeof (mtmGufogiallo.currentUser.team.players) !== "undefined" ) {
+				for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.length; i++ )
 					{
-						if ( mtmGufogiallo.currentUser.team.players.goalkeepers[i].id == playerId )
+						if ( mtmGufogiallo.currentUser.team.players[ i ].id == playerId )
 							{
-								//mtmGufogiallo.currentUser.team.players.goalkeepers.splice( i, 1);
-								updateData( mtmGufogiallo.currentUser.team.players.goalkeepers, i );
+								mtmGufogiallo.currentUser.team.players[ i ].lastName = updatedPlayerData.lastName;
+								mtmGufogiallo.currentUser.team.players[ i ].firstName = updatedPlayerData.firstName;
+								mtmGufogiallo.currentUser.team.players[ i ].phoneNumber = updatedPlayerData.phoneNumber;
+								mtmGufogiallo.currentUser.team.players[ i ].emailAddress = updatedPlayerData.emailAddress;
+								mtmGufogiallo.currentUser.team.players[ i ].shirtNumber = updatedPlayerData.shirtNumber;
+								mtmGufogiallo.currentUser.team.players[ i ].birthDate = updatedPlayerData.birthdateLong;
+								mtmGufogiallo.currentUser.team.players[ i ].role = updatedPlayerData.role;
 							}
 					}
 			}
-			if ( typeof (mtmGufogiallo.currentUser.team.players.defenders) !== "undefined" ) {
-				for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.defenders.length; i++ )
-					{
-						if ( mtmGufogiallo.currentUser.team.players.defenders[i].id == playerId )
-							{
-								//mtmGufogiallo.currentUser.team.players.defenders.splice( i, 1);
-								updateData( mtmGufogiallo.currentUser.team.players.defenders, i );
-							}
-					}
-			}
-			if ( typeof (mtmGufogiallo.currentUser.team.players.midfielders) !== "undefined" ) {
-				for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.midfielders.length; i++ )
-					{
-						if ( mtmGufogiallo.currentUser.team.players.midfielders[i].id == playerId )
-							{
-								//mtmGufogiallo.currentUser.team.players.midfielders.splice( i, 1);
-								updateData( mtmGufogiallo.currentUser.team.players.midfielders, i );
-							}
-					}
-			}			
-			if ( typeof (mtmGufogiallo.currentUser.team.players.forwards) !== "undefined" ) {
-				for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.forwards.length; i++ )
-					{
-						if ( mtmGufogiallo.currentUser.team.players.forwards[i].id == playerId )
-							{
-								//mtmGufogiallo.currentUser.team.players.forwards.splice( i, 1);
-								updateData( mtmGufogiallo.currentUser.team.players.forwards, i );
-							}
-					}
-			}				
-
 			mtmGufogiallo.controller.refreshUI( "#/team" );
-			mtmGufogiallo.controller.showAlert( "alert.messagePlayerUpdated");
+			mtmGufogiallo.controller.showAlert( "toast.messagePlayerUpdated");
 		}, 
 		function failure( errorCode ) {
 			//Ouch! We have an error
@@ -723,10 +798,36 @@ mtmGufogiallo.controller.updatePlayerHandler = function( event, playerId ) {
 };
 
 
-mtmGufogiallo.controller.deletePlayerHandler = function( event, playerId ) {
+mtmGufogiallo.controller.deletePlayerHandler = function( event ) {
 	event.preventDefault();
 	event.stopPropagation();
-	/***TODO***/
+	var playerId = event.data;
+	mtmGufogiallo.controller.showConfirmModal( "confirmModal.titleTypeAlert", "confirmModal.messageConfirmPlayerDelete", null, function () {
+		mtmGufogiallo.data.deletePlayer( playerId, 
+			function success( result ) {
+				//Player has been successfully deleted
+				console.log( "Player has been successfully deleted" );			
+				var deletedPlayerId = result;
+				//remove player from model
+				if ( typeof (mtmGufogiallo.currentUser.team.players) !== "undefined" ) {
+					for ( var i = 0; i < mtmGufogiallo.currentUser.team.players.length; i++ )
+						{
+							if ( mtmGufogiallo.currentUser.team.players[i].id == playerId )
+								{
+									mtmGufogiallo.currentUser.team.players.splice( i, 1);
+								}
+						}
+				}
+				mtmGufogiallo.controller.appController.setLocation( "#/team" );
+				mtmGufogiallo.controller.refreshUI( "#/team" );
+				mtmGufogiallo.controller.showAlert( "toast.messagePlayerDeleted", deletedPlayerId );
+			}, 
+			function failure( errorCode ) {
+				//Ouch! We have an error
+				mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeError", "infoModal.messageTypeError1" );
+			}
+		);
+	});
 }
 
 mtmGufogiallo.controller.cancelAddPlayerHandler = function( event ) {
@@ -742,6 +843,193 @@ mtmGufogiallo.controller.cancelEditPlayerHandler = function( event ) {
 	mtmGufogiallo.controller.appController.setLocation( "#/team" );
 };
 
+/**
+ * Handles the creation of a new training
+ * 
+ * @function 
+ * @param event - the event to be handled
+ */
+mtmGufogiallo.controller.addTrainingHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	mtmGufogiallo.controller.appController.setLocation( "#/addTraining" );
+};
+
+
+
+mtmGufogiallo.controller.cancelAddTrainingHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	mtmGufogiallo.controller.appController.setLocation( "#/training" );
+};
+
+
+mtmGufogiallo.controller.saveTrainingHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	var trainingDateString = jQuery( "#trainingDate" ).val();
+	var trainingTimeString = jQuery( "#trainingTime" ).val();
+	var trainingTimestampLong = new Date( trainingDateString.split("/")[2], trainingDateString.split("/")[1] -1 , trainingDateString.split("/")[0], trainingTimeString.split(":")[0], trainingTimeString.split(":")[1], 0, 0).getTime();
+	var location = jQuery( "#location" ).val(); 
+	var note = jQuery( "#note" ).val();
+	var newTrainings = [];
+	var teamId = mtmGufogiallo.currentUser.team.id
+	var recurrence = parseInt(jQuery( "#recurrence" ).val());
+	var  recurrenceExpireTimestampLong = 0;
+	var recurrenceFrequency = null;
+	var currentTrainingTimestampLong = null;
+	var recurrenceExpireDateString = null;
+	var recurrenceExpireTimestampLong = null;
+	//newTraining[0] is the parent training, which is populated in any case (i.e. both for single and for recurring trainings)
+	newTrainings[0] = {
+		timestamp: trainingTimestampLong,	
+		location: location,
+		note: note,	
+		recurrence: recurrence,
+	}
+	if (recurrence !== 0) { 
+		//recurring training: let's check if it is daily or weekly
+		if (recurrence === 1) {
+			//daily training
+			recurrenceFrequency = 86400000; //number of milliseconds in a day
+		} else {
+			//weekly training
+			recurrenceFrequency = 604800000; //number of milliseconds in a week
+		}
+		currentTrainingTimestampLong = trainingTimestampLong + recurrenceFrequency;
+		recurrenceExpireDateString = jQuery( "#trainingRecurrenceExpireDate" ).val();
+		recurrenceExpireTimestampLong = new Date( recurrenceExpireDateString.split("/")[2], recurrenceExpireDateString.split("/")[1] -1 , recurrenceExpireDateString.split("/")[0], trainingTimeString.split(":")[0], trainingTimeString.split(":")[1], 0, 0).getTime();
+		//set the recurrenceExpireTimestamp for the parent event, according to the value specified by the user
+		newTrainings[0].recurrenceExpireTimestamp = recurrenceExpireTimestampLong;
+		while ( currentTrainingTimestampLong <= recurrenceExpireTimestampLong) {
+			//create child trainings and add them to the newTrainingsArray. Loop ends when reaching or surpassing the recurrence expiration date
+			newTrainings.push (
+				{
+					timestamp: currentTrainingTimestampLong,	
+					location: location,
+					note: note,
+					recurrence: recurrence,
+					recurrenceExpireTimestamp: recurrenceExpireTimestampLong
+				}
+			);
+			currentTrainingTimestampLong = currentTrainingTimestampLong + recurrenceFrequency;
+		}
+	} else {
+		//non-recurring event: set the recurrenceExpireTimestamp for the parent (single) event to 0
+		newTrainings[0].recurrenceExpireTimestamp = 0;		
+	}
+	mtmGufogiallo.data.addTraining( newTrainings, teamId,
+		function success( result ) {
+			//New training(s) have been saved
+			console.log( "New training(s) saved with parent ID: " + result[0] );			
+			newTrainings[0].id = result[0];
+			if ( typeof( mtmGufogiallo.currentUser.trainings ) === "undefined" ) {
+				//this is our first  training so let's initialize the trainings array
+				mtmGufogiallo.currentUser.trainings = [];
+			}
+			//add to the model every training specified in newTrainings
+			for ( var i=0; i < newTrainings.length; i++ ) {
+				mtmGufogiallo.currentUser.trainings.push(
+					{
+						"id": result[i],
+						"location": newTrainings[i].location,
+						"note": newTrainings[i].note,
+						"repeat": newTrainings[i].recurrence,
+						"repeat_end_time": newTrainings[i].recurrenceExpireTimestamp,
+						"timestamp": newTrainings[i].timestamp
+					}
+				);
+			}
+		
+			mtmGufogiallo.controller.refreshUI( "#/training" );
+			mtmGufogiallo.controller.showAlert( "toast.messageTrainingAdded",  newTrainings[0].id );
+		}, 
+		function failure( errorCode ) {
+			//Ouch! We have an error
+			mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeError", "infoModal.messageTypeError1" );
+		}
+	);
+};
+
+
+mtmGufogiallo.controller.updateTrainingHandler = function( event, trainingId ) {
+	event.preventDefault();
+	event.stopPropagation();
+	var trainingDateString = jQuery( "#trainingDate" ).val();
+	var trainingTimeString = jQuery( "#trainingTime" ).val();
+	var updatedTrainingData = {
+		timestamp: new Date( trainingDateString.split("/")[2], trainingDateString.split("/")[1]-1, trainingDateString.split("/")[0], trainingTimeString.split(":")[0], trainingTimeString.split(":")[1], 0, 0).getTime(),
+		location: jQuery( "#location" ).val(),
+		note: jQuery( "#note" ).val(),
+	}
+	mtmGufogiallo.data.updateTraining( trainingId, updatedTrainingData, 
+		function success( result ) {
+			//Training has been successfully updated
+			console.log( "Training has been successfully updated" );			
+			updatedTrainingData.id = result;
+			//update training in model
+			if ( typeof (mtmGufogiallo.currentUser.trainings) !== "undefined" ) {
+				for ( var i = 0; i < mtmGufogiallo.currentUser.trainings.length; i++ )
+					{
+						if ( mtmGufogiallo.currentUser.trainings[ i ].id == trainingId )
+							{
+								mtmGufogiallo.currentUser.trainings[ i ].location = updatedTrainingData.location;
+								mtmGufogiallo.currentUser.trainings[ i ].note = updatedTrainingData.note;
+								mtmGufogiallo.currentUser.trainings[ i ].timestamp = updatedTrainingData.timestamp;
+							}
+					}
+			}
+			mtmGufogiallo.controller.refreshUI( "#/training" );
+			mtmGufogiallo.controller.showAlert( "toast.messageTrainingUpdated");
+		}, 
+		function failure( errorCode ) {
+			//Ouch! We have an error
+			mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeError", "infoModal.messageTypeError1" );
+		}
+	);
+};
+
+mtmGufogiallo.controller.deleteTrainingHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	var trainingId = event.data;
+	mtmGufogiallo.controller.showConfirmModal( "confirmModal.titleTypeAlert", "confirmModal.messageConfirmTrainingDelete", "confirmModal.checkboxRecursiveTrainingDelete", function ( isRecursiveDelete ) {
+		mtmGufogiallo.data.deleteTraining( trainingId, isRecursiveDelete, 
+			function success( results ) {
+				//Training has been successfully deleted
+				console.log( "Training(s) have been successfully deleted" );			
+				results.forEach( function (deletedTrainingId)  {
+					//remove training from model
+					if ( typeof (mtmGufogiallo.currentUser.trainings) !== "undefined" ) {
+						for ( var i = 0; i < mtmGufogiallo.currentUser.trainings.length; i++ )
+							{
+								if ( mtmGufogiallo.currentUser.trainings[i].id == deletedTrainingId )
+									{
+										mtmGufogiallo.currentUser.trainings.splice( i, 1);
+									}
+							}
+					}
+				});
+				mtmGufogiallo.controller.appController.setLocation( "#/training" );
+				mtmGufogiallo.controller.refreshUI( "#/training" );
+				mtmGufogiallo.controller.showAlert( "toast.messageTrainingDeleted" );
+			}, 
+			function failure( errorCode ) {
+				//Ouch! We have an error
+				mtmGufogiallo.controller.showInfoModal( "infoModal.titleTypeError", "infoModal.messageTypeError1" );
+			}
+		);
+	});
+}
+
+
+mtmGufogiallo.controller.cancelEditTrainingHandler = function( event ) {
+	event.preventDefault();
+	event.stopPropagation();
+	mtmGufogiallo.controller.appController.setLocation( "#/training" );
+};
+
 
 mtmGufogiallo.controller.refreshUI = function( targetLocation ) {
 	if ( targetLocation !== window.location.hash ) {
@@ -751,4 +1039,6 @@ mtmGufogiallo.controller.refreshUI = function( targetLocation ) {
 		mtmGufogiallo.controller.appController.refresh();
 	}
 };
+
+
 

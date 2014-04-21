@@ -1,0 +1,51 @@
+<script> jQuery("#addTrainingPage").i18n(); </script>
+
+<div id="addTrainingPage">
+	<h2>This is the {{paneName}} page</h2>
+	<form role="form" id="addTrainingForm" action="#/addTraining" method="post">
+		<div class="form-group">
+			<label for="trainingDate" data-i18n="trainingAttribute.date">Date</label>
+			<input id="trainingDate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]datetime.datePlaceholder" data-validation="date" data-validation-optional="false" data-validation-format="dd/mm/yyyy"></input>
+		</div>
+		<div class="form-group">
+			<label for="trainingTime" data-i18n="trainingAttribute.time">Time</label>
+			<input id="trainingTime" data-inputmask="'alias': 'hh:mm'" type="text" maxlength="5" placeholder="hh:mm" data-i18n="[placeholder]datetime.timePlaceholder" data-validation="time" data-validation-optional="false" data-validation-format="hh:mm"></input>
+		</div>
+		<div class="form-group">
+			<label for="recurrence" data-i18n="trainingAttribute.recurrence">Recurrence</label>
+			<select id="recurrence" class="form-control">
+				<option value="0" data-i18n="trainingAttribute.noRecurrence">None</option>
+				<option value="1" data-i18n="trainingAttribute.dailyRecurrence">Every day</option>
+				<option value="2" data-i18n="trainingAttribute.weeklyRecurrence">Every week</option>
+			</select>
+		</div>
+		<div class="form-group" id="recurrenceExpireDate">
+			<label for="trainingRecurrenceExpireDate" data-i18n="trainingAttribute.recurrenceExpireDate">Until date</label>
+			<input id="trainingRecurrenceExpireDate" data-inputmask="'alias': 'date'" type="text" maxlength="10" placeholder="DD/MM/YYYY" data-i18n="[placeholder]datetime.datePlaceholder" data-validation="laterDate" data-validation-optional="true" data-validation-format="dd/mm/yyyy"></input>
+		</div>
+		<div class="form-group">
+			<label for="location" data-i18n="trainingAttribute.location">Location</label>
+			<input type="text" class="form-control" id="location" placeholder="Location" data-i18n="[placeholder]trainingAttribute.locationPlaceholder" data-validation="alphanumeric" data-validation-allowing="-_ " data-validation-optional="true" value="{{selectedTraining.location}}"></input>
+		</div>
+		
+		<div class="form-group">
+			<label for="note" data-i18n="trainingAttribute.note">Note</label>
+			<input type="text" class="form-control" id="note" data-validation="alphanumeric" data-validation-allowing="-_ " data-validation-optional="true" value="{{selectedTraining.note}}"></input>
+		</div>
+		<button id="saveTrainingButton" type="submit" class="btn btn-info" data-i18n="buttons.saveTrainingButton">Save</button>
+		<button id="cancelAddTrainingButton" type="button" class="btn btn-default" data-i18n="buttons.cancelAddTrainingButton">Cancel</button>
+	</form>
+</div>
+
+<script>
+	//Handle the visibility of the recurrence expire date: shall be visible only when recurrence  is specified
+	jQuery( "#recurrence" ).change( function() {
+		var recurrenceSelector =  jQuery( "#recurrence" ).val();
+		var expireDateDiv = jQuery( "#recurrenceExpireDate" );
+		if ( recurrenceSelector !== "0") {
+			expireDateDiv.css( "display", "block" );
+		} else {
+			expireDateDiv.css( "display", "none" );
+		}
+	});
+</script>

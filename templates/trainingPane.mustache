@@ -1,5 +1,41 @@
 <script> jQuery("#trainingPane").i18n(); </script>
+<script>
+	var timestamp,
+		trainingDate,
+		trainingTime;
+</script>
 
 <div id="trainingPane">
 	<h2>This is the {{paneName}} pane</h2>
+		<div class="table-responsive">
+		<table id="trainingTable" class="table table-striped .table-bordered .table-condensed .table-hover tablesorter">
+			<thead>
+				<tr> 
+					<th colspan="2" data-i18n="trainingAttribute.label">Trainings</th>
+				</tr>
+				<tr>
+					<th data-i18n="trainingAttribute.date">Date</th>
+					<th data-i18n="trainingAttribute.time">Time</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{{#trainings}}
+					<tr id="{{id}}" class="trainingDetails" onclick="document.location = '#/editTraining?id={{id}}'"> 
+						<!-- *** TODO *** Aggiungere paginazione -->
+						<td class="trainingDate"></td>
+						<td class="trainingTime"></td>
+						<script>
+							timestamp = new Date( {{timestamp}} );
+							trainingDate = ('0' + timestamp.getDate()).slice(-2) + "/" + ('0' + (timestamp.getMonth() +1)).slice(-2) + "/" + timestamp.getFullYear();
+							trainingTime = ('0' + timestamp.getHours()).slice(-2) + ":" + ('0' + timestamp.getMinutes()).slice(-2);
+							jQuery("#{{id}}").children( "td:eq(0)").text( trainingDate );
+							jQuery("#{{id}}").children( "td:eq(1)").text( trainingTime );
+						</script>
+					</tr>
+				{{/trainings}}
+			</tbody>
+		</table>
+	</div>	
+	<button id="addTrainingButton" type="button" class="btn btn-info" data-i18n="buttons.addTrainingButton"><span class="glyphicon glyphicon-plus"></span>Add training</button>
 </div>

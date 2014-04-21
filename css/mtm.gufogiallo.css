@@ -75,6 +75,10 @@ tr.playerDetails:hover {
 	background-color: #5BC0DE;
 }
 
+tr.trainingDetails:hover {
+	background-color: #5BC0DE;
+}
+
 #alert {
 	display: table;
 	position: fixed;
@@ -86,3 +90,6 @@ tr.playerDetails:hover {
 	line-height: 60px;
 }
 
+#recurrenceExpireDate {
+	display:  none;
+}
